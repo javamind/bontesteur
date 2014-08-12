@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context antiJARLocking="true" path="/devoxx">
+    <Resource name="jdbc/test"
+              auth="Container"
+              type="javax.sql.DataSource"
+              driverClassName="org.postgresql.Driver"
+              username="devoxx2014"
+              password="devoxx2014"
+              url="jdbc:postgresqll://localhost:5432/devoxx2014"
+              maxActive="100"
+              maxIdle="30"
+              maxWait="10000"/>
+</Context>
