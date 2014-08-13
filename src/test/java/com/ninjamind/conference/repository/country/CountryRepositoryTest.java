@@ -1,10 +1,12 @@
-package com.ninjamind.conference.repository;
+package com.ninjamind.conference.repository.country;
 
 import com.ninja_squad.dbsetup.DbSetup;
+import com.ninja_squad.dbsetup.Operations;
 import com.ninja_squad.dbsetup.destination.DataSourceDestination;
 import com.ninja_squad.dbsetup.operation.Operation;
 import com.ninjamind.conference.config.ApplicationConfig;
 import com.ninjamind.conference.domain.Country;
+import com.ninjamind.conference.repository.CountryRepository;
 import org.assertj.core.api.Assertions;
 import org.hibernate.PropertyValueException;
 import org.junit.Before;
@@ -18,6 +20,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 import static com.ninja_squad.dbsetup.Operations.deleteAllFrom;
+import static com.ninja_squad.dbsetup.Operations.insertInto;
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.extractProperty;
@@ -29,6 +32,14 @@ import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
  */
 @ContextConfiguration(classes = {ApplicationConfig.class})
 public class CountryRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
+
+    private static final Operation INSERT_COUNTRY_DATA =
+            insertInto("country")
+                    .columns("id", "code", "name")
+                    .values(1, "FRA", "France")
+                    .values(2, "USA", "United States")
+                    .build();
+
     /**
      * Datasource utilisee dans les tests
      */
@@ -48,9 +59,9 @@ public class CountryRepositoryTest extends AbstractTransactionalJUnit4SpringCont
     @Before
     public void prepare() throws Exception {
         Operation operation =
-                sequenceOf(
+                Operations.sequenceOf(
                         deleteAllFrom("country"),
-                        InitializeOperations.INSERT_COUNTRY_DATA);
+                        INSERT_COUNTRY_DATA);
         DbSetup dbSetup = new DbSetup(new DataSourceDestination(dataSource), operation);
         dbSetup.launch();
     }

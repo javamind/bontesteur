@@ -1,4 +1,4 @@
-package com.ninjamind.conference.service.sav;
+package com.ninjamind.conference.service.lisibilite.sav;
 
 import com.google.common.collect.Lists;
 import com.ninjamind.conference.domain.Conference;
@@ -20,7 +20,6 @@ import java.util.List;
 import static junitparams.JUnitParamsRunner.$;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
-import static org.assertj.core.data.Index.atIndex;
 import static org.mockito.Mockito.when;
 
 /**

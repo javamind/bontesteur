@@ -1,5 +1,6 @@
 package com.ninjamind.conference.service.talk;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.ninjamind.conference.domain.Talk;
 import com.ninjamind.conference.events.CreatedEvent;
@@ -144,5 +145,11 @@ public class TalkServiceImpl implements TalkService
      */
     private Sort sortByNameAsc() {
         return new Sort(Sort.Direction.ASC, "name");
+    }
+
+    @VisibleForTesting
+    public TalkServiceImpl setTalkRepository(TalkRepository talkRepository) {
+        this.talkRepository = talkRepository;
+        return this;
     }
 }

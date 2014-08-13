@@ -1,4 +1,4 @@
-package com.ninjamind.conference.service.sav;
+package com.ninjamind.conference.service.lisibilite.sav;
 
 import com.ninjamind.conference.domain.Conference;
 import com.ninjamind.conference.repository.ConferenceRepository;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 /**
  * Test de la class {@link com.ninjamind.conference.service.DefaultFavoriteService}
  */
-public class DefaultFavoriteServiceTest {
+public class DefaultFavoriteServiceAvantModifTest {
     @Mock
     private ConferenceRepository conferenceRepository;
 

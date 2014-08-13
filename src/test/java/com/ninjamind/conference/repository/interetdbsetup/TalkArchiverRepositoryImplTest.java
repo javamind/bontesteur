@@ -1,8 +1,9 @@
-package com.ninjamind.conference.repository;
+package com.ninjamind.conference.repository.interetdbsetup;
 
 import com.ninjamind.conference.config.ApplicationConfig;
 import com.ninjamind.conference.domain.Talk;
 import com.ninjamind.conference.junit.rule.DbUnitTestRule;
+import com.ninjamind.conference.repository.TalkArchiverRepository;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;

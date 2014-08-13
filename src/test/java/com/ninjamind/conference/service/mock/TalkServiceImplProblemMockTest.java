@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,23 +23,19 @@ import static org.mockito.Mockito.*;
  * Il ne faudrait pas de verify et ne faire que des stubs
  * @author EHRET_G
  */
-@RunWith(JUnitParamsRunner.class)
 public class TalkServiceImplProblemMockTest {
 
     public static final String CONF_NAME = "Le bon testeur il teste... le mauvais testeur il teste...";
 
-    @Mock
-    TalkRepository talkRepository;
+    private TalkRepository talkRepository;
 
-    @InjectMocks
-    TalkServiceImpl service;
+    private TalkServiceImpl service;
 
     @Before
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        talkRepository = Mockito.mock(TalkRepository.class);
+        service = new TalkServiceImpl().setTalkRepository(talkRepository);
     }
-
-
 
 
     @Test

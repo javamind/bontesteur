@@ -1,4 +1,4 @@
-package com.ninjamind.conference.repository.sav;
+package com.ninjamind.conference.repository.interetdbsetup.sav;
 
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.destination.DataSourceDestination;

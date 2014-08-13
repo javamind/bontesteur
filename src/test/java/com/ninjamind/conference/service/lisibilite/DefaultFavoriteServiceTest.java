@@ -1,10 +1,13 @@
-package com.ninjamind.conference.service;
+package com.ninjamind.conference.service.lisibilite;
 
 import com.ninjamind.conference.domain.Conference;
 import com.ninjamind.conference.repository.ConferenceRepository;
+import com.ninjamind.conference.service.DefaultFavoriteService;
+import junitparams.JUnitParamsRunner;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -18,8 +21,9 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 /**
- * Test de la class {@link DefaultFavoriteService}
+ * Test de la class {@link com.ninjamind.conference.service.DefaultFavoriteService}
  */
+@RunWith(JUnitParamsRunner.class)
 public class DefaultFavoriteServiceTest {
     @Mock
     private ConferenceRepository conferenceRepository;
@@ -33,12 +37,13 @@ public class DefaultFavoriteServiceTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
     }
+
     /**
      * Test de la methode {@link DefaultFavoriteService#getTheHypestConfs()}
      * cas ou une valeur est retournee
      */
     @Test
-    public void testTheHypestConfOK() throws Exception {
+    public void shouldFindTheHypestConf() throws Exception {
 
         ///////////////  premier cas de test : Devoxx2014 + Mix-IT2014
         Conference devoxx2014 = new Conference("Devoxx2014", 154L, 658L, 2820L);
@@ -92,7 +97,7 @@ public class DefaultFavoriteServiceTest {
      * cas ou aucune conference n'existe
      */
     @Test
-    public void testTheHypestConfKO() {
+    public void shouldThrowsExceptionWhenNoData() {
         when(conferenceRepository.findAll()).thenReturn(conferences);
 
         try {

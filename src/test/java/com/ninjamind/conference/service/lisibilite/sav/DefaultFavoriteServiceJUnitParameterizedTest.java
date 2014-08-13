@@ -1,4 +1,4 @@
-package com.ninjamind.conference.service.sav;
+package com.ninjamind.conference.service.lisibilite.sav;
 
 import com.ninjamind.conference.domain.Conference;
 import com.ninjamind.conference.repository.ConferenceRepository;

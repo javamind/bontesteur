@@ -1,4 +1,4 @@
-package com.ninjamind.conference.repository.sav;
+package com.ninjamind.conference.repository.interetdbsetup.sav;
 
 import com.ninjamind.conference.config.ApplicationConfig;
 import com.ninjamind.conference.domain.Talk;
