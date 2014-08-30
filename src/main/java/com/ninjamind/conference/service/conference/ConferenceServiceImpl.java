@@ -101,14 +101,21 @@ public class ConferenceServiceImpl implements ConferenceService {
             if (conferenceToPersist == null) {
                 return null;
             }
-            conferenceToPersist.setCountry(conference.getCountry());
-            conferenceToPersist.setPostalCode(conference.getPostalCode());
-            conferenceToPersist.setCity(conference.getCity());
-            conferenceToPersist.setDateEnd(conference.getDateEnd());
-            conferenceToPersist.setDateStart(conference.getDateStart());
-            conferenceToPersist.setName(conference.getName());
-            conferenceToPersist.setStreetAdress(conference.getStreetAdress());
-            return conferenceToPersist;
+            return conferenceToPersist
+                    .setCountry(conference.getCountry())
+                    .setPostalCode(conference.getPostalCode())
+                    .setCity(conference.getCity())
+                    .setDateEnd(conference.getDateEnd())
+                    .setDateStart(conference.getDateStart())
+                    .setName(conference.getName())
+                    .setStreetAdress(conference.getStreetAdress())
+                    .setImage(conference.getImage())
+                    .setNbConferenceProposals(conference.getNbConferenceProposals())
+                    .setNbConferenceSlots(conference.getNbConferenceSlots())
+                    .setNbAttendees(conference.getNbAttendees())
+                    .setNbHoursToSellTicket(conference.getNbHoursToSellTicket())
+                    .setNbTwitterFollowers(conference.getNbTwitterFollowers());
+
         }
         else {
             //On enregistre
@@ -169,20 +176,6 @@ public class ConferenceServiceImpl implements ConferenceService {
         return new Sort(Sort.Direction.ASC, "name");
     }
 
-    protected class ResultConfCalculator {
-        private Conference conference;
-        private Double speakerInterest;
-        private Double socialInterest;
-        private Double attendeeInterest;
-
-        public ResultConfCalculator(Conference conference, Double speakerInterest, Double socialInterest, Double attendeeInterest) {
-            this.conference = conference;
-            this.speakerInterest = speakerInterest;
-            this.socialInterest = socialInterest;
-            this.attendeeInterest = attendeeInterest;
-        }
-    }
-
     @Override
     public Conference getCoolestConference() {
 
@@ -212,21 +205,21 @@ public class ConferenceServiceImpl implements ConferenceService {
 
                 })
                 .sorted((o1, o2) -> {
-                        int compSpeaker = o1.speakerInterest.compareTo(o2.speakerInterest);
-                        int compSocial = o1.socialInterest.compareTo(o2.socialInterest);
-                        int compAttendee = o1.attendeeInterest.compareTo(o2.attendeeInterest);
+                    int compSpeaker = o1.speakerInterest.compareTo(o2.speakerInterest);
+                    int compSocial = o1.socialInterest.compareTo(o2.socialInterest);
+                    int compAttendee = o1.attendeeInterest.compareTo(o2.attendeeInterest);
 
-                        //Si le ratio speaker est plus faible c'est que l'interet speaker est plus grand puisqu'il propose plus
-                        int pointConf1 = compSpeaker <= 0 ? 1 : 0;
-                        int pointConf2 = compSpeaker >= 0 ? 1 : 0;
-                        //Si le ratio social est plus fort c'est que les participants sont plus intï¿½resses par la conf car il s'abonnent plus
-                        pointConf1 += compSocial >= 0 ? 1 : 0;
-                        pointConf2 += compSocial <= 0 ? 1 : 0;
-                        //Si le ratio participant est plus faible c'est que les participants sont plus intï¿½resses par la conf car il reserve plus vite
-                        pointConf1 += compAttendee <= 0 ? 1 : 0;
-                        pointConf2 += compAttendee >= 0 ? 1 : 0;
+                    //Si le ratio speaker est plus faible c'est que l'interet speaker est plus grand puisqu'il propose plus
+                    int pointConf1 = compSpeaker <= 0 ? 1 : 0;
+                    int pointConf2 = compSpeaker >= 0 ? 1 : 0;
+                    //Si le ratio social est plus fort c'est que les participants sont plus intï¿½resses par la conf car il s'abonnent plus
+                    pointConf1 += compSocial >= 0 ? 1 : 0;
+                    pointConf2 += compSocial <= 0 ? 1 : 0;
+                    //Si le ratio participant est plus faible c'est que les participants sont plus intï¿½resses par la conf car il reserve plus vite
+                    pointConf1 += compAttendee <= 0 ? 1 : 0;
+                    pointConf2 += compAttendee >= 0 ? 1 : 0;
 
-                        return pointConf2 - pointConf1;
+                    return pointConf2 - pointConf1;
                 })
                 .collect(Collectors.toList());
 
@@ -236,5 +229,19 @@ public class ConferenceServiceImpl implements ConferenceService {
             return null;
         }
         return results.iterator().next().conference;
+    }
+
+    protected class ResultConfCalculator {
+        private Conference conference;
+        private Double speakerInterest;
+        private Double socialInterest;
+        private Double attendeeInterest;
+
+        public ResultConfCalculator(Conference conference, Double speakerInterest, Double socialInterest, Double attendeeInterest) {
+            this.conference = conference;
+            this.speakerInterest = speakerInterest;
+            this.socialInterest = socialInterest;
+            this.attendeeInterest = attendeeInterest;
+        }
     }
 }

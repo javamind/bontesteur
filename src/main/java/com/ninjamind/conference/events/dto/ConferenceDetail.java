@@ -21,6 +21,7 @@ public class ConferenceDetail implements Serializable {
     protected String codeCountry;
     protected String dateStart;
     protected String dateEnd;
+    protected String image;
     private Long nbHourToSellTicket;
     private Long nbAttendees;
     private Long nbConferenceSlot;
@@ -41,6 +42,11 @@ public class ConferenceDetail implements Serializable {
         this.city = conference.getCity();
         this.postalCode = conference.getPostalCode();
         this.codeCountry = conference.getCountry() != null ? conference.getCountry().getCode() : null;
+        this.image = conference.getImage();
+        this.nbTwitterFollowers = conference.getNbTwitterFollowers();
+        this.nbAttendees = conference.getNbAttendees();
+        this.nbConferenceProposals = conference.getNbConferenceProposals();
+        this.nbConferenceSlot = conference.getNbConferenceSlots();
     }
 
     /**
@@ -53,6 +59,7 @@ public class ConferenceDetail implements Serializable {
                 .setDateStart(Utils.dateJsonToJava(getDateStart()))
                 .setDateEnd(Utils.dateJsonToJava(getDateEnd()))
                 .setId(id)
+                .setImage(image)
                 .setStreetAdress(streetAdress)
                 .setCity(city)
                 .setPostalCode(postalCode)
@@ -62,6 +69,7 @@ public class ConferenceDetail implements Serializable {
                 .setNbHoursToSellTicket(nbHourToSellTicket)
                 .setNbConferenceSlots(nbConferenceSlot)
                 .setNbConferenceProposals(nbConferenceProposals);
+
     }
 
     public Long getId() {
@@ -79,6 +87,15 @@ public class ConferenceDetail implements Serializable {
 
     public ConferenceDetail setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public ConferenceDetail setImage(String image) {
+        this.image = image;
         return this;
     }
 

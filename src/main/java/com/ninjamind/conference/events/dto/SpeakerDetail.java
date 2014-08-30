@@ -20,7 +20,7 @@ public class SpeakerDetail implements Serializable {
     protected String postalCode;
     protected String company;
     protected String codeCountry;
-
+    protected String image;
     /**
      *
      */
@@ -37,6 +37,7 @@ public class SpeakerDetail implements Serializable {
         this.city = speaker.getCity();
         this.postalCode = speaker.getPostalCode();
         this.company = speaker.getCompany();
+        this.image = speaker.getImage();
         this.codeCountry = speaker.getCountry() != null ? speaker.getCountry().getCode() : null;
     }
 
@@ -49,7 +50,9 @@ public class SpeakerDetail implements Serializable {
                 .setCity(city)
                 .setPostalCode(postalCode)
                 .setCompany(company)
+                .setImage(image)
                 .setCountry(new Country().setCode(codeCountry));
+
     }
 
 
@@ -89,7 +92,14 @@ public class SpeakerDetail implements Serializable {
         this.id = id;
         return this;
     }
+    public String getImage() {
+        return image;
+    }
 
+    public SpeakerDetail setImage(String image) {
+        this.image = image;
+        return this;
+    }
     public SpeakerDetail setFirstname(String firstname) {
         this.firstname = firstname;
         return this;

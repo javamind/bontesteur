@@ -83,12 +83,13 @@ public class TalkServiceImpl implements TalkService {
             if(talkToPersist==null){
                 return null;
             }
-            talkToPersist.setLevel(talk.getLevel());
-            talkToPersist.setNbpeoplemax(talk.getNbpeoplemax());
-            talkToPersist.setPlace(talk.getPlace());
-            talkToPersist.setDescription(talk.getDescription());
-            talkToPersist.setName(talk.getName());
-            return talkToPersist;
+            return talkToPersist
+                    .setLevel(talk.getLevel())
+                    .setNbpeoplemax(talk.getNbpeoplemax())
+                    .setPlace(talk.getPlace())
+                    .setDescription(talk.getDescription())
+                    .setName(talk.getName());
+
         }
         else{
             //On enregistre

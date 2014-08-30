@@ -91,14 +91,15 @@ public class SpeakerServiceImpl implements SpeakerService {
             if(speakerToPersist==null){
                 return null;
             }
-            speakerToPersist.setCountry(speaker.getCountry());
-            speakerToPersist.setPostalCode(speaker.getPostalCode());
-            speakerToPersist.setCity(speaker.getCity());
-            speakerToPersist.setFirstname(speaker.getFirstname());
-            speakerToPersist.setLastname(speaker.getLastname());
-            speakerToPersist.setCompany(speaker.getCompany());
-            speakerToPersist.setStreetAdress(speaker.getStreetAdress());
-            return speakerToPersist;
+            return speakerToPersist
+                    .setCountry(speaker.getCountry())
+                    .setPostalCode(speaker.getPostalCode())
+                    .setCity(speaker.getCity())
+                    .setFirstname(speaker.getFirstname())
+                    .setImage(speaker.getImage())
+                    .setLastname(speaker.getLastname())
+                    .setCompany(speaker.getCompany())
+                    .setStreetAdress(speaker.getStreetAdress());
         }
         else{
             //On enregistre

@@ -4,7 +4,7 @@ package com.ninjamind.conference.domain;
  * @author ehret_g
  */
 public enum Level {
-    BEGINER,
+    BEGINNER,
     CONFIRMED,
-    EXPERT;
+    EXPERIENCED;
 }

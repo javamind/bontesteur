@@ -21,7 +21,7 @@ import java.util.List;
  * @author ehret_g
  */
 @Controller
-@RequestMapping("/talks")
+@RequestMapping("/talk")
 public class TalkController {
     /**
      * Service associe permettant de gerer les {@link com.ninjamind.conference.domain.Talk}

@@ -10,6 +10,7 @@ CREATE TABLE conference
   dateend date,
   version integer,
   majuser character varying(40),
+  image character varying(40),
   majdate date,
   nbHoursToSellTicket integer,
   nbAttendees integer,
@@ -23,7 +24,7 @@ WITH (
 );
 
 CREATE SEQUENCE seq_conference
-    START WITH 1
+    START WITH 100
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE

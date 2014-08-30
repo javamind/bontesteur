@@ -24,6 +24,7 @@ public class Speaker {
     @ManyToOne
     @JoinColumn(name = "country_id")
     private Country country;
+    protected String image;
     @Version
     private Long version;
     @ManyToMany
@@ -123,6 +124,15 @@ public class Speaker {
 
     public Speaker setVersion(Long version) {
         this.version = version;
+        return this;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public Speaker setImage(String image) {
+        this.image = image;
         return this;
     }
 

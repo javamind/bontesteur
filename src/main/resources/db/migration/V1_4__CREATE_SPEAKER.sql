@@ -7,6 +7,7 @@ CREATE TABLE speaker
   streetadress character varying(50),
   postalcode character varying(40),
   city character varying(40),
+  image character varying(100),
   country_id integer,
   version integer,
   majuser character varying(40),
@@ -18,7 +19,7 @@ WITH (
 );
 
 CREATE SEQUENCE seq_speaker
-    START WITH 1
+    START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE

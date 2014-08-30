@@ -20,6 +20,7 @@ public class Conference {
     private String name;
     private String streetAdress;
     private String city;
+    private String image;
     private String postalCode;
     @ManyToOne
     @JoinColumn(name = "country_id")
@@ -181,6 +182,15 @@ public class Conference {
     public Conference setNbTwitterFollowers(Long nbTwitterFollowers) {
         this.nbTwitterFollowers = nbTwitterFollowers;
         return this;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public Conference setImage(String image) {
+        this.image = image;
+        return  this;
     }
 
     public Double getProposalsRatio() {

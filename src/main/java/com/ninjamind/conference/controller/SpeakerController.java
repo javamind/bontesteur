@@ -21,7 +21,7 @@ import java.util.List;
  * @author ehret_g
  */
 @Controller
-@RequestMapping("/speakers")
+@RequestMapping("/speaker")
 public class SpeakerController {
     /**
      * Service associe permettant de gerer les {@link com.ninjamind.conference.domain.Speaker}

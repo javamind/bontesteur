@@ -21,7 +21,7 @@ import java.util.List;
  * @author ehret_g
  */
 @Controller
-@RequestMapping("/conferences")
+@RequestMapping("/conference")
 public class ConferenceController {
     /**
      * Service associe permettant de gerer les {@link com.ninjamind.conference.domain.Conference}
@@ -74,7 +74,7 @@ public class ConferenceController {
         if(!deletedConferenceEvent.isEntityFound()){
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(new ConferenceDetail((Conference) deletedConferenceEvent.getValue()), HttpStatus.OK);
+        return new ResponseEntity(deletedConferenceEvent.getValue(), HttpStatus.OK);
     }
 
     /**
