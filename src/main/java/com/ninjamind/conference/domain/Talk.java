@@ -11,7 +11,7 @@ import java.util.Set;
 @Table(name = "talk")
 @NamedQueries(value = {
         @NamedQuery(name = "findTalkToArchive", query = "SELECT t FROM Talk t WHERE year(t.dateStart) < :year"),
-        @NamedQuery(name = "archiveTalks", query = "UPDATE Talk t SET t.status='Archived' WHERE year(t.dateStart) < :year")
+        @NamedQuery(name = "archiveTalks", query = "UPDATE Talk t SET t.status='ARCHIVED' WHERE year(t.dateStart) < :year")
 })
 public class Talk {
     @Id
@@ -46,131 +46,128 @@ public class Talk {
     public Talk() {
     }
 
-    public Talk(String name) {
-        this.name = name;
-    }
-
-    public Talk(Long id, String name) {
-        this(id);
-        this.name = name;
-    }
-
-    public Talk(Long id, String name, Date dateStart, Date dateEnd) {
-        this(id);
-        this.name = name;
-        this.dateStart = dateStart;
-        this.dateEnd = dateEnd;
-    }
-
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public Talk setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public Talk setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public Talk setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     public String getPlace() {
         return place;
     }
 
-    public void setPlace(String place) {
+    public Talk setPlace(String place) {
         this.place = place;
+        return this;
     }
 
     public Integer getNbpeoplemax() {
         return nbpeoplemax;
     }
 
-    public void setNbpeoplemax(Integer nbpeoplemax) {
+    public Talk setNbpeoplemax(Integer nbpeoplemax) {
         this.nbpeoplemax = nbpeoplemax;
+        return this;
     }
 
     public Level getLevel() {
         return level;
     }
 
-    public void setLevel(Level level) {
+    public Talk setLevel(Level level) {
         this.level = level;
+        return this;
     }
 
     public Set<Speaker> getSpeakers() {
         return speakers;
     }
 
-    public void setSpeakers(Set<Speaker> speakers) {
+    public Talk setSpeakers(Set<Speaker> speakers) {
         this.speakers = speakers;
+        return this;
     }
 
     public Set<Conference> getConferences() {
         return conferences;
     }
 
-    public void setConferences(Set<Conference> conferences) {
+    public Talk setConferences(Set<Conference> conferences) {
         this.conferences = conferences;
+        return this;
     }
 
     public Long getVersion() {
         return version;
     }
 
-    public void setVersion(Long version) {
+    public Talk setVersion(Long version) {
         this.version = version;
+        return this;
     }
 
     public Date getDateStart() {
         return dateStart;
     }
 
-    public void setDateStart(Date dateStart) {
+    public Talk setDateStart(Date dateStart) {
         this.dateStart = dateStart;
+        return this;
     }
 
     public Date getDateEnd() {
         return dateEnd;
     }
 
-    public void setDateEnd(Date dateEnd) {
+    public Talk setDateEnd(Date dateEnd) {
         this.dateEnd = dateEnd;
+        return this;
     }
 
     public Status getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public Talk setStatus(Status status) {
         this.status = status;
+        return this;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
 
         Talk talk = (Talk) o;
 
-        if (description != null ? !description.equals(talk.description) : talk.description != null) return false;
-        if (level != talk.level) return false;
-        if (!name.equals(talk.name)) return false;
-        if (nbpeoplemax != null ? !nbpeoplemax.equals(talk.nbpeoplemax) : talk.nbpeoplemax != null) return false;
-        if (place != null ? !place.equals(talk.place) : talk.place != null) return false;
-        if (speakers != null ? !speakers.equals(talk.speakers) : talk.speakers != null) return false;
+        if (!name.equals(talk.name)){
+            return false;
+        }
 
         return true;
     }

@@ -109,7 +109,7 @@ public class CountryRepositoryTest extends AbstractTransactionalJUnit4SpringCont
      */
     @Test
     public void shouldCreateCountry() {
-        Country country = new Country("CODE", "Libelle");
+        Country country = new Country().setCode("CODE").setName("Libelle");
         Country persistantCountry = countryRepository.save(country);
 
         assertThat(persistantCountry.getId()).isNotNull().isEqualTo(country.getId());

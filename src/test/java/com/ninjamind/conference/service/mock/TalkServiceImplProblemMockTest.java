@@ -41,12 +41,12 @@ public class TalkServiceImplProblemMockTest {
     @Test
     public void shouldCreateTalk(){
         //La sauvegarde du talk retournera une instance avec un id
-        Talk talkCreated = new Talk(CONF_NAME);
+        Talk talkCreated = new Talk().setName(CONF_NAME);
         talkCreated.setId(2345L);
         when(talkRepository.save(any(Talk.class))).thenReturn(talkCreated);
 
         //On appelle notre service de creation
-        CreatedEvent<Talk> createdTalkEvent = service.createTalk(new Talk(CONF_NAME));
+        CreatedEvent<Talk> createdTalkEvent = service.createTalk(new Talk().setName(CONF_NAME));
         assertThat(((Talk)createdTalkEvent.getValue()).getId()).isEqualTo(2345L);
         assertThat(((Talk)createdTalkEvent.getValue()).getName()).isEqualTo(CONF_NAME);
 

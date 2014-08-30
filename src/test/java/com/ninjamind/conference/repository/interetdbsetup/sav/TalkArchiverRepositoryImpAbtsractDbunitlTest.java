@@ -48,7 +48,7 @@ public class TalkArchiverRepositoryImpAbtsractDbunitlTest extends AbstractDbunit
         List<Talk> talks = talkArchiverRepository.findTalkToArchive(2014);
         assertThat(talks).hasSize(1);
         assertThat(talks.get(0)).isEqualToComparingOnlyGivenFields(
-                new Talk(2L, "La conf passee"), "id", "name");
+                new Talk().setId(2L).setName("La conf passee"), "id", "name");
 
     }
 

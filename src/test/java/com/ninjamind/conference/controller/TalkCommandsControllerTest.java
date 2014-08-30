@@ -1,5 +1,6 @@
 package com.ninjamind.conference.controller;
 
+import com.google.common.collect.Lists;
 import com.ninjamind.conference.domain.Talk;
 import com.ninjamind.conference.events.CreatedEvent;
 import com.ninjamind.conference.events.DeletedEvent;
@@ -13,22 +14,26 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
- *  Test du controller {@link com.ninjamind.conference.controller.TalkCommandsController}
+ *  Test du controller {@link com.ninjamind.conference.controller.TalkController}
  * @author ehret_g
  */
 public class TalkCommandsControllerTest {
     MockMvc mockMvc;
 
     @InjectMocks
-    TalkCommandsController controller;
+    TalkController controller;
 
     @Mock
     TalkService talkService;
@@ -57,7 +62,7 @@ public class TalkCommandsControllerTest {
     public void shouldCreateEntity() throws Exception {
         //Le service renvoie une entite
         when(talkService.createTalk(any(Talk.class))).thenReturn(
-                new CreatedEvent<Talk>(true, new Talk("Le bon testeur il teste..."))
+                new CreatedEvent<>(true, new Talk().setDescription("Le bon testeur il teste..."))
         );
 
         //L'appel de l'URL doit retourner un status 201
@@ -79,7 +84,7 @@ public class TalkCommandsControllerTest {
     public void shouldNotCreateEntityIfValidationError() throws Exception {
         //Le service renvoie une entite
         when(talkService.createTalk(any(Talk.class))).thenReturn(
-                new CreatedEvent<Talk>(false, null));
+                new CreatedEvent<>(false, null));
 
         //L'appel de l'URL doit retourner un status 406 si donn�es inavlide
         mockMvc.perform(
@@ -99,7 +104,7 @@ public class TalkCommandsControllerTest {
     public void shouldUpdateEntity() throws Exception {
         //Le service renvoie une entite
         when(talkService.updateTalk(any(Talk.class))).thenReturn(
-                new UpdatedEvent<Talk>(true, new Talk("Le bon testeur il teste..."))
+                new UpdatedEvent<>(true, new Talk().setDescription("Le bon testeur il teste..."))
         );
 
         //L'appel de l'URL doit retourner un status 201
@@ -120,7 +125,7 @@ public class TalkCommandsControllerTest {
     public void shouldNotUpdateEntityIfEntityNotFound() throws Exception {
         //Le service renvoie une entite
         when(talkService.updateTalk(any(Talk.class))).thenReturn(
-                new UpdatedEvent<Talk>(false, null));
+                new UpdatedEvent<>(false, null));
 
         //L'appel de l'URL doit retourner un status 404 si donn�es non trouvee
         mockMvc.perform(
@@ -141,7 +146,7 @@ public class TalkCommandsControllerTest {
     public void shouldNotUpdateEntityIfValidationError() throws Exception {
         //Le service renvoie une entite
         when(talkService.updateTalk(any(Talk.class))).thenReturn(
-                new UpdatedEvent<Talk>(false, true, null));
+                new UpdatedEvent<>(false, true, null));
 
         //L'appel de l'URL doit retourner un status 406 si donn�es invalide
         mockMvc.perform(
@@ -192,5 +197,65 @@ public class TalkCommandsControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+    }
+
+    /**
+     * Test de la recuperation d'une talk via l'API REST : <code>/talks/{id}</code>. On teste le cas passant
+     * @throws Exception
+     */
+    @Test
+    public void shouldReturnEntityWhenSearchByIdValid() throws Exception {
+        String idCherche = "1";
+
+        //Le service renvoie une entite
+        when(talkService.getTalk(any(Talk.class))).thenReturn(
+                new Talk().setName("Le bon testeur il teste..."));
+
+        //L'appel de l'URL doit retourner un status 200
+        mockMvc.perform(get("/talks/{id}", idCherche))
+                .andDo(print())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("name").value("Le bon testeur il teste..."))
+                .andExpect(status().isOk());
+    }
+
+    /**
+     * Test de la recuperation d'une talk via l'API REST : <code>/talks/{id}</code>. On teste le cas oe l'enregistrement
+     * n'existe pas
+     * @throws Exception
+     */
+    @Test
+    public void shouldReturnNotFoundStatusWhenSearchByIdInvalid() throws Exception {
+        //Le service renvoie une entite
+        when(talkService.getTalk(any(Talk.class))).thenReturn(
+                null);
+
+        //L'appel de l'URL doit retourner un status 200
+        mockMvc.perform(get("/talks/{id}", "1"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    /**
+     * Test de la recuperation de toutes les talks via l'API REST : <code>/talks</code>. On teste le cas passant
+     *
+     * @throws Exception
+     */
+    @Test
+    public void shouldReturnListEntityWhenSearchAllTalk() throws Exception {
+        List<Talk> listExpected = Lists.newArrayList(
+                new Talk().setName("Le bon testeur il teste..."),
+                new Talk().setName("Le mauvais testeur il teste...")
+        );
+
+        //Le service renvoie une entite
+        when(talkService.getAllTalk()).thenReturn(listExpected);
+
+        //L'appel de l'URL doit retourner un status 200
+        mockMvc.perform(get("/talks"))
+                .andDo(print())
+                .andExpect(jsonPath("$[0].name").value("Le bon testeur il teste..."))
+                .andExpect(jsonPath("$[1].name").value("Le mauvais testeur il teste..."))
+                .andExpect(status().isOk());
     }
 }

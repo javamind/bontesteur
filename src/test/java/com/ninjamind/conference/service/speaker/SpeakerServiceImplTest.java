@@ -71,13 +71,13 @@ public class SpeakerServiceImplTest {
         //La recherche de pays sans code ne donnera rien
         when(countryRepository.findCountryByCode(null)).thenReturn(null);
         //La sauvegarde du speaker retournera une instance avec un id
-        Speaker speakerCreated = new Speaker("Martin","Fowler");
+        Speaker speakerCreated = new Speaker().setFirstname("Martin").setLastname("Fowler");
         speakerCreated.setId(1L);
         when(speakerRepository.save(any(Speaker.class))).thenReturn(speakerCreated);
 
         //On appelle notre service de creation
         CreatedEvent<Speaker> createdSpeakerEvent =
-                service.createSpeaker(new Speaker("Martin","Fowler"));
+                service.createSpeaker(new Speaker().setFirstname("Martin").setLastname("Fowler"));
 
         assertThat(((Speaker)createdSpeakerEvent.getValue()).getId()).isEqualTo(1L);
         assertThat(((Speaker)createdSpeakerEvent.getValue()).getLastname()).isEqualTo("Fowler");
@@ -90,15 +90,15 @@ public class SpeakerServiceImplTest {
     @Test
     public void shouldCreateSpeakerWithCountry(){
         //La recherche de pays renvoie une occurence
-        when(countryRepository.findCountryByCode("FR")).thenReturn(new Country("FR", "France"));
+        when(countryRepository.findCountryByCode("FR")).thenReturn(new Country().setCode("FR").setName("France"));
         //La sauvegarde du speaker retournera une instance avec un id
-        Speaker speakerCreated = new Speaker("Martin","Fowler");
+        Speaker speakerCreated = new Speaker().setFirstname("Martin").setLastname("Fowler");
         speakerCreated.setId(1L);
         when(speakerRepository.save(any(Speaker.class))).thenReturn(speakerCreated);
 
         //On appelle notre service de creation
-        Speaker param = new Speaker("Martin","Fowler");
-        param.setCountry(new Country("FR","France"));
+        Speaker param = new Speaker().setFirstname("Martin").setLastname("Fowler");
+        param.setCountry(new Country().setCode("FR").setName("France"));
         CreatedEvent<Speaker> createdSpeakerEvent = service.createSpeaker(param);
         assertThat(((Speaker)createdSpeakerEvent.getValue()).getId()).isEqualTo(1L);
         assertThat(((Speaker)createdSpeakerEvent.getValue()).getFirstname()).isEqualTo("Martin");
@@ -131,7 +131,7 @@ public class SpeakerServiceImplTest {
     @Test
     public void shouldUpdateSpeakerEvenIfNoCountryAdded(){
         //La sauvegarde du speaker retournera une instance avec un id
-        Speaker speakerCreated = new Speaker("Martin","Fowler");
+        Speaker speakerCreated = new Speaker().setFirstname("Martin").setLastname("Fowler");
         speakerCreated.setId(1L);
 
         //La recherche de pays sans code ne donnera rien
@@ -142,7 +142,7 @@ public class SpeakerServiceImplTest {
         when(speakerRepository.save(any(Speaker.class))).thenReturn(speakerCreated);
 
         //On appelle notre service de creation
-        Speaker param = new Speaker("Martin","Fowler");
+        Speaker param = new Speaker().setFirstname("Martin").setLastname("Fowler");
         param.setId(1L);
         UpdatedEvent<Speaker> updatedSpeakerEvent = service.updateSpeaker(param);
 
@@ -158,14 +158,14 @@ public class SpeakerServiceImplTest {
     @Test
     public void shouldNotUpdateSpeakerWhenConfIsNotFound(){
         //La recherche de pays renvoie une occurence
-        when(countryRepository.findCountryByCode("FR")).thenReturn(new Country("FR", "France"));
+        when(countryRepository.findCountryByCode("FR")).thenReturn(new Country().setCode("FR").setName("France"));
         //La recherche de l'entite passee renvoie pas de resultat
         when(speakerRepository.findOne(1L)).thenReturn(null);
 
         //On appelle notre service de creation
-        Speaker param = new Speaker("Martin","Fowler");
+        Speaker param = new Speaker().setFirstname("Martin").setLastname("Fowler");
         param.setId(1L);
-        param.setCountry(new Country("FR", "France"));
+        param.setCountry(new Country().setCode("FR").setName("France"));
         UpdatedEvent<Speaker> updatedSpeakerEvent = service.updateSpeaker(param);
 
         assertThat(updatedSpeakerEvent.getValue()).isNull();
@@ -180,10 +180,10 @@ public class SpeakerServiceImplTest {
     @Test
     public void shouldDeleteSpeaker(){
         //La recherche de l'entite passee renvoie un resultat
-        when(speakerRepository.findOne(1L)).thenReturn(new Speaker("Martin","Fowler"));
+        when(speakerRepository.findOne(1L)).thenReturn(new Speaker().setFirstname("Martin").setLastname("Fowler"));
 
         //On appelle notre service de creation
-        DeletedEvent<Speaker> deletedSpeakerEvent = service.deleteSpeaker(new Speaker(1L));
+        DeletedEvent<Speaker> deletedSpeakerEvent = service.deleteSpeaker(new Speaker().setId(1L));
 
         assertThat(deletedSpeakerEvent.getValue()).isNotNull();
 
@@ -199,7 +199,7 @@ public class SpeakerServiceImplTest {
         when(speakerRepository.findOne(1L)).thenReturn(null);
 
         //On appelle notre service de creation
-        DeletedEvent<Speaker> deletedSpeakerEvent = service.deleteSpeaker(new Speaker(1L));
+        DeletedEvent<Speaker> deletedSpeakerEvent = service.deleteSpeaker(new Speaker().setId(1L));
 
         assertThat(deletedSpeakerEvent.getValue()).isNull();
         assertThat(deletedSpeakerEvent.isEntityFound()).isEqualTo(false);

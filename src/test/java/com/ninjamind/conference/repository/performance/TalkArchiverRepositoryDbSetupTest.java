@@ -44,8 +44,8 @@ public class TalkArchiverRepositoryDbSetupTest extends AbstractTransactionalTest
                 deleteAllFrom("talk"),
                 insertInto("talk")
                         .columns("id", "name", "status", "dateStart", "dateEnd")
-                        .values(1L, "Le bon testeur il teste", Status.Active, new DateTime(2014, 4, 18, 13, 30).toDate(), new DateTime(2014, 4, 18, 14, 20).toDate())
-                        .values(2L, "La conf passee", Status.Active, new DateTime(2010, 4, 18, 13, 30).toDate(), new DateTime(2010, 4, 18, 14, 20).toDate())
+                        .values(1L, "Le bon testeur il teste", Status.ACTIVE, new DateTime(2014, 4, 18, 13, 30).toDate(), new DateTime(2014, 4, 18, 14, 20).toDate())
+                        .values(2L, "La conf passee", Status.ACTIVE, new DateTime(2010, 4, 18, 13, 30).toDate(), new DateTime(2010, 4, 18, 14, 20).toDate())
                         .build()
         );
         DbSetup dbSetup = new DbSetup(DataSourceDestination.with(dataSource), init_data);
@@ -60,7 +60,7 @@ public class TalkArchiverRepositoryDbSetupTest extends AbstractTransactionalTest
         List<Talk> talks = talkArchiverRepository.findTalkToArchive(2014);
         assertThat(talks).hasSize(1);
         assertThat(talks.get(0)).isEqualToComparingOnlyGivenFields(
-                new Talk(2L, "La conf passee"), "id", "name");
+                new Talk().setId(2L).setName("La conf passee"), "id", "name");
 
     }
 

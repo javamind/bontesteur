@@ -15,7 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class ConferenceServiceImpl implements ConferenceService {
-    private static Logger LOG = LoggerFactory.make();
+    private static final Logger LOG = LoggerFactory.make();
 
     @Autowired
     private CountryRepository countryRepository;
@@ -212,9 +211,7 @@ public class ConferenceServiceImpl implements ConferenceService {
                     return new ResultConfCalculator(conference, speakerInterest, socialInterest, attendeeInterest);
 
                 })
-                .sorted(new Comparator<ResultConfCalculator>() {
-                    @Override
-                    public int compare(ResultConfCalculator o1, ResultConfCalculator o2) {
+                .sorted((o1, o2) -> {
                         int compSpeaker = o1.speakerInterest.compareTo(o2.speakerInterest);
                         int compSocial = o1.socialInterest.compareTo(o2.socialInterest);
                         int compAttendee = o1.attendeeInterest.compareTo(o2.attendeeInterest);
@@ -230,7 +227,6 @@ public class ConferenceServiceImpl implements ConferenceService {
                         pointConf2 += compAttendee >= 0 ? 1 : 0;
 
                         return pointConf2 - pointConf1;
-                    }
                 })
                 .collect(Collectors.toList());
 

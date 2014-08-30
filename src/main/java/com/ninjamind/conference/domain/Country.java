@@ -24,52 +24,59 @@ public class Country {
     public Country() {
     }
 
-    public Country(String code, String name) {
-        this.code = code;
-        this.name = name;
-    }
-
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public Country setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public Country setCode(String code) {
         this.code = code;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public Country setName(String name) {
         this.name = name;
+        return this;
     }
 
     public Long getVersion() {
         return version;
     }
 
-    public void setVersion(Long version) {
+    public Country setVersion(Long version) {
         this.version = version;
+        return this;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
 
         Country country = (Country) o;
 
-        if (code != null ? !code.equals(country.code) : country.code != null) return false;
-        if (name != null ? !name.equals(country.name) : country.name != null) return false;
+        if (code != null ? !code.equals(country.code) : country.code != null){
+            return false;
+        }
+        if (name != null ? !name.equals(country.name) : country.name != null){
+            return false;
+        }
 
         return true;
     }

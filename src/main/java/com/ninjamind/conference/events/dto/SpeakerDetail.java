@@ -27,63 +27,29 @@ public class SpeakerDetail implements Serializable {
     public SpeakerDetail() {
     }
 
-    /**
-     * @param id
-     * @param firstname
-     * @param lastname
-     */
-    public SpeakerDetail(Long id, String firstname, String lastname) {
-        this.id = id;
-        this.firstname = firstname;
-        this.lastname = lastname;
-    }
 
-    /**
-     *
-     * @param id
-     * @param firstname
-     * @param lastname
-     * @param streetAdress
-     * @param city
-     * @param postalCode
-     * @param company
-     * @param codeCountry
-     */
-    public SpeakerDetail(Long id, String firstname, String lastname, String streetAdress, String city, String postalCode, String company, String codeCountry) {
-        this.id = id;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.streetAdress = streetAdress;
-        this.city = city;
-        this.postalCode = postalCode;
-        this.company = company;
-        this.codeCountry = codeCountry;
-    }
 
     public SpeakerDetail(Speaker speaker) {
-        this(
-                speaker.getId(),
-                speaker.getFirstname(),
-                speaker.getLastname(),
-                speaker.getStreetAdress(),
-                speaker.getCity(),
-                speaker.getPostalCode(),
-                speaker.getCompany(),
-                speaker.getCountry() != null ? speaker.getCountry().getCode() : null
-        );
+        this.id = speaker.getId();
+        this.firstname = speaker.getFirstname();
+        this.lastname = speaker.getLastname();
+        this.streetAdress = speaker.getStreetAdress();
+        this.city = speaker.getCity();
+        this.postalCode = speaker.getPostalCode();
+        this.company = speaker.getCompany();
+        this.codeCountry = speaker.getCountry() != null ? speaker.getCountry().getCode() : null;
     }
 
     public Speaker toSpeaker() {
-        Speaker speaker = new Speaker(
-                getFirstname(),
-                getLastname());
-        speaker.setId(id);
-        speaker.setStreetAdress(streetAdress);
-        speaker.setCity(city);
-        speaker.setPostalCode(postalCode);
-        speaker.setCompany(company);
-        speaker.setCountry(new Country(codeCountry, null));
-        return speaker;
+        return new Speaker()
+                .setFirstname(getFirstname())
+                .setLastname(getLastname())
+                .setId(id)
+                .setStreetAdress(streetAdress)
+                .setCity(city)
+                .setPostalCode(postalCode)
+                .setCompany(company)
+                .setCountry(new Country().setCode(codeCountry));
     }
 
 
@@ -117,5 +83,45 @@ public class SpeakerDetail implements Serializable {
 
     public String getCodeCountry() {
         return codeCountry;
+    }
+
+    public SpeakerDetail setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public SpeakerDetail setFirstname(String firstname) {
+        this.firstname = firstname;
+        return this;
+    }
+
+    public SpeakerDetail setLastname(String lastname) {
+        this.lastname = lastname;
+        return this;
+    }
+
+    public SpeakerDetail setStreetAdress(String streetAdress) {
+        this.streetAdress = streetAdress;
+        return this;
+    }
+
+    public SpeakerDetail setCity(String city) {
+        this.city = city;
+        return this;
+    }
+
+    public SpeakerDetail setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+        return this;
+    }
+
+    public SpeakerDetail setCompany(String company) {
+        this.company = company;
+        return this;
+    }
+
+    public SpeakerDetail setCodeCountry(String codeCountry) {
+        this.codeCountry = codeCountry;
+        return this;
     }
 }

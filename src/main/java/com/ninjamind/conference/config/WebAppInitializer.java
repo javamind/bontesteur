@@ -12,9 +12,9 @@ import java.util.EnumSet;
 
 public class WebAppInitializer implements WebApplicationInitializer {
 
-	protected Class<?>[] getRootConfigClasses() {
-		return new Class<?>[] { ApplicationConfig.class };
-	}
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class<?>[]{ApplicationConfig.class};
+    }
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
@@ -32,7 +32,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
         registration.setLoadOnStartup(1);
         registration.addMapping("/");
 
-        //Nous avons besoin de déclarer un Filter pour les requetes CORS
+        //Nous avons besoin de dï¿½clarer un Filter pour les requetes CORS
         FilterRegistration.Dynamic filterRegistration = servletContext.addFilter("corsFilter", new SimpleCORSFilter());
         filterRegistration.addMappingForServletNames(
                 EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE),

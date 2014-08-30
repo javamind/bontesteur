@@ -1,7 +1,6 @@
 package com.ninjamind.conference.controller.mock;
 
-import com.google.common.collect.Lists;
-import com.ninjamind.conference.controller.ConferenceQueriesController;
+import com.ninjamind.conference.controller.ConferenceController;
 import com.ninjamind.conference.domain.Conference;
 import com.ninjamind.conference.service.conference.ConferenceService;
 import org.junit.Before;
@@ -10,19 +9,21 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Date;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
- * Test du controller {@link com.ninjamind.conference.controller.ConferenceQueriesController}
+ * Test du controller {@link com.ninjamind.conference.controller.ConferenceController}
  * exemple utilisation de {@link org.springframework.test.web.servlet.MockMvc}
  * @author ehret_g
  */
@@ -30,7 +31,7 @@ public class ConferenceQueriesControllerMockMvcSpringTest {
     MockMvc mockMvc;
 
     @InjectMocks
-    ConferenceQueriesController controller;
+    ConferenceController controller;
 
     @Mock
     ConferenceService conferenceService;
@@ -45,7 +46,7 @@ public class ConferenceQueriesControllerMockMvcSpringTest {
     @Test
     public void shouldFindMixit() throws Exception {
         //on veut que le service renvoie une entite
-        when(conferenceService.getConference(any(Conference.class))).thenReturn(new Conference("Mix-IT",new Date(0),new Date(0)));
+        when(conferenceService.getConference(any(Conference.class))).thenReturn(new Conference().setName("Mix-IT").setDateStart(new Date(0)).setDateEnd(new Date(0)));
 
         //L'appel de l'URL doit retourner un status 200
         mockMvc.perform(get("/conferences/{id}", "1"))

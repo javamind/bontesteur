@@ -78,13 +78,13 @@ public class ConferenceServiceImplTest {
         //La recherche de pays sans code ne donnera rien
         when(countryRepository.findCountryByCode(null)).thenReturn(null);
         //La sauvegarde de la conference retournera une instance avec un id
-        Conference conferenceCreated = new Conference("Mix-IT", new DateTime(2014,4,29,9,0).toDate(), new DateTime(2014,4,30,19,0).toDate());
+        Conference conferenceCreated = new Conference().setName("Mix-IT").setDateStart(new DateTime(2014,4,29,9,0).toDate()).setDateEnd(new DateTime(2014,4,30,19,0).toDate());
         conferenceCreated.setId(1L);
         when(conferenceRepository.save(any(Conference.class))).thenReturn(conferenceCreated);
 
         //On appelle notre service de creation
         CreatedEvent<Conference> createdConferenceEvent =
-                service.createConference(new Conference("Mix-IT", new DateTime(2014,4,29,9,0).toDate(), new DateTime(2014,4,30,19,0).toDate()));
+                service.createConference(new Conference().setName("Mix-IT").setDateStart(new DateTime(2014,4,29,9,0).toDate()).setDateEnd(new DateTime(2014,4,30,19,0).toDate()));
 
         assertThat(((Conference)createdConferenceEvent.getValue()).getId()).isEqualTo(1L);
         assertThat(Utils.dateJavaToJson(((Conference) createdConferenceEvent.getValue()).getDateStart())).isEqualTo("2014-04-29 09:00:00");
@@ -97,15 +97,15 @@ public class ConferenceServiceImplTest {
     @Test
     public void shouldCreateConferenceWithCountry(){
         //La recherche de pays renvoie une occurence
-        when(countryRepository.findCountryByCode("FR")).thenReturn(new Country("FR", "France"));
+        when(countryRepository.findCountryByCode("FR")).thenReturn(new Country().setCode("FR").setName("France"));
         //La sauvegarde de la conference retournera une instance avec un id
-        Conference conferenceCreated = new Conference("Mix-IT", new DateTime(2014,4,29,9,0).toDate(), new DateTime(2014,4,30,19,0).toDate());
+        Conference conferenceCreated = new Conference().setName("Mix-IT").setDateStart(new DateTime(2014,4,29,9,0).toDate()).setDateEnd(new DateTime(2014,4,30,19,0).toDate());
         conferenceCreated.setId(1L);
         when(conferenceRepository.save(any(Conference.class))).thenReturn(conferenceCreated);
 
         //On appelle notre service de creation
-        Conference param = new Conference("Mix-IT", new DateTime(2014,4,29,9,0).toDate(), new DateTime(2014,4,30,19,0).toDate());
-        param.setCountry(new Country("FR","France"));
+        Conference param = new Conference().setName("Mix-IT").setDateStart(new DateTime(2014,4,29,9,0).toDate()).setDateEnd(new DateTime(2014,4,30,19,0).toDate());;
+        param.setCountry(new Country().setCode("FR").setName("France"));
         CreatedEvent<Conference> createdConferenceEvent = service.createConference(param);
         assertThat(((Conference)createdConferenceEvent.getValue()).getId()).isEqualTo(1L);
         assertThat(Utils.dateJavaToJson(((Conference) createdConferenceEvent.getValue()).getDateStart())).isEqualTo("2014-04-29 09:00:00");
@@ -138,7 +138,7 @@ public class ConferenceServiceImplTest {
     @Test
     public void shouldUpdateConferenceEvenIfNoCountryAdded(){
         //La sauvegarde de la conference retournera une instance avec un id
-        Conference conferenceCreated = new Conference("Mix-IT", new DateTime(2014,4,29,9,0).toDate(), new DateTime(2014,4,30,19,0).toDate());
+        Conference conferenceCreated = new Conference().setName("Mix-IT").setDateStart(new DateTime(2014,4,29,9,0).toDate()).setDateEnd(new DateTime(2014,4,30,19,0).toDate());
         conferenceCreated.setId(1L);
 
         //La recherche de pays sans code ne donnera rien
@@ -149,7 +149,7 @@ public class ConferenceServiceImplTest {
         when(conferenceRepository.save(any(Conference.class))).thenReturn(conferenceCreated);
 
         //On appelle notre service de creation
-        Conference param = new Conference("Mix-IT", new DateTime(2014,4,29,9,0).toDate(), new DateTime(2014,4,30,19,0).toDate());
+        Conference param = new Conference().setName("Mix-IT").setDateStart(new DateTime(2014,4,29,9,0).toDate()).setDateEnd(new DateTime(2014,4,30,19,0).toDate());
         param.setId(1L);
         UpdatedEvent<Conference> updatedConferenceEvent = service.updateConference(param);
 
@@ -165,14 +165,14 @@ public class ConferenceServiceImplTest {
     @Test
     public void shouldNotUpdateConferenceWhenConfIsNotFound(){
         //La recherche de pays renvoie une occurence
-        when(countryRepository.findCountryByCode("FR")).thenReturn(new Country("FR", "France"));
+        when(countryRepository.findCountryByCode("FR")).thenReturn(new Country().setCode("FR").setName("France"));
         //La recherche de l'entite passee renvoie pas de resultat
         when(conferenceRepository.findOne(1L)).thenReturn(null);
 
         //On appelle notre service de creation
-        Conference param = new Conference("Mix-IT", new DateTime(2014,4,29,9,0).toDate(), new DateTime(2014,4,30,19,0).toDate());
+        Conference param = new Conference().setName("Mix-IT").setDateStart(new DateTime(2014,4,29,9,0).toDate()).setDateEnd(new DateTime(2014,4,30,19,0).toDate());
         param.setId(1L);
-        param.setCountry(new Country("FR", "France"));
+        param.setCountry(new Country().setCode("FR").setName("France"));
         UpdatedEvent<Conference> updatedConferenceEvent = service.updateConference(param);
 
         assertThat(updatedConferenceEvent.getValue()).isNull();
@@ -187,10 +187,10 @@ public class ConferenceServiceImplTest {
     @Test
     public void shouldDeleteConference(){
         //La recherche de l'entite passee renvoie un resultat
-        when(conferenceRepository.findOne(1L)).thenReturn(new Conference("Mix-IT", new DateTime(2014,4,29,9,0).toDate(), new DateTime(2014,4,30,19,0).toDate()));
+        when(conferenceRepository.findOne(1L)).thenReturn(new Conference().setName("Mix-IT").setDateStart(new DateTime(2014,4,29,9,0).toDate()).setDateEnd(new DateTime(2014,4,30,19,0).toDate()));
 
         //On appelle notre service de creation
-        DeletedEvent<Conference> deletedConferenceEvent = service.deleteConference(new Conference(1L));
+        DeletedEvent<Conference> deletedConferenceEvent = service.deleteConference(new Conference().setId(1L));
 
         assertThat(deletedConferenceEvent.getValue()).isNotNull();
 
@@ -206,7 +206,7 @@ public class ConferenceServiceImplTest {
         when(conferenceRepository.findOne(1L)).thenReturn(null);
 
         //On appelle notre service de creation
-        DeletedEvent<Conference> deletedConferenceEvent = service.deleteConference(new Conference(1L));
+        DeletedEvent<Conference> deletedConferenceEvent = service.deleteConference(new Conference().setId(1L));
 
         assertThat(deletedConferenceEvent.getValue()).isNull();
         assertThat(deletedConferenceEvent.isEntityFound()).isEqualTo(false);
@@ -291,8 +291,16 @@ public class ConferenceServiceImplTest {
      * @param nbTwitterFollowers
      */
     private void addConference(String name, Long nbHourToSellTicket, Long nbAttendees, Long nbConferenceSlot, Long nbConferenceProposals, Long nbTwitterFollowers) {
-        Conference conferenceCreated = new Conference(name, new DateTime(2014, 4, 29, 9, 0).toDate(), new DateTime(2014, 4, 30, 19, 0).toDate());
-        conferenceCreated.initConferenceStat(nbHourToSellTicket, nbAttendees, nbConferenceSlot, nbConferenceProposals, nbTwitterFollowers);
-        conferences.add(conferenceCreated);
+        conferences.add(
+                new Conference()
+                        .setName(name)
+                        .setDateStart(new DateTime(2014, 4, 29, 9, 0).toDate())
+                        .setDateEnd(new DateTime(2014, 4, 30, 19, 0).toDate())
+                        .setNbHoursToSellTicket(nbHourToSellTicket)
+                        .setNbAttendees(nbAttendees)
+                        .setNbConferenceSlots(nbConferenceSlot)
+                        .setNbConferenceProposals(nbConferenceProposals)
+                        .setNbTwitterFollowers(nbTwitterFollowers)
+        );
     }
 }

@@ -41,8 +41,8 @@ public class DefaultFavoriteServiceAvantModifTest {
     public void testTheHypestConfOK() throws Exception {
 
         ///////////////  premier cas de test : Devoxx2014 + Mix-IT2014
-        Conference devoxx2014 = new Conference("Devoxx2014", 154L, 658L, 2820L);
-        Conference mixit2014 = new Conference("Mix-IT2014", 30L, 200L, 845L);
+        Conference devoxx2014 = new Conference().setName("Devoxx2014").setNbConferenceSlots(154L).setNbConferenceProposals(658L);
+        Conference mixit2014 = new Conference().setName("Mix-IT2014").setNbConferenceSlots(30L).setNbConferenceProposals(200L);
         conferences.add(devoxx2014);
         conferences.add(mixit2014);
 
@@ -59,7 +59,7 @@ public class DefaultFavoriteServiceAvantModifTest {
         conferences.clear();
         conferences.add(devoxx2014);
         conferences.add(mixit2014);
-        Conference jugsummercamp2014 = new Conference("JugSummerCamp2014", 12L, 97L);
+        Conference jugsummercamp2014 = new Conference().setName("JugSummerCamp2014").setNbConferenceSlots(12L).setNbConferenceProposals(97L);
         conferences.add(jugsummercamp2014);
 
         when(conferenceRepository.findAll()).thenReturn(conferences);
@@ -74,7 +74,7 @@ public class DefaultFavoriteServiceAvantModifTest {
         /////////////// troisième cas de test : Devoxx2014 + Mix-IT2014 sans un parametre
         conferences.clear();
         conferences.add(devoxx2014);
-        Conference mixit2014WithoutParam = new Conference("Mix-IT2014", null, 200L, null);
+        Conference mixit2014WithoutParam = new Conference().setName("Mix-IT2014").setNbConferenceProposals(200L);
         conferences.add(mixit2014WithoutParam);
 
         when(conferenceRepository.findAll()).thenReturn(conferences);

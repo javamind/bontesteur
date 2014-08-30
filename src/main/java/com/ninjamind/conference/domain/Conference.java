@@ -48,167 +48,139 @@ public class Conference {
     public Conference() {
     }
 
-    public Conference(Long id) {
-        this.id = id;
-    }
-
-    public Conference(String name) {
-        this.name = name;
-    }
-
-    public Conference(String name, Date start, Date end) {
-        this.name = name;
-        this.dateStart = start;
-        this.dateEnd = end;
-    }
-
-    public Conference(String name, Long nbConferenceSlots, Long nbConferenceProposals) {
-        this.name = name;
-        this.nbConferenceSlots = nbConferenceSlots;
-        this.nbConferenceProposals = nbConferenceProposals;
-    }
-    public Conference(String name, Long nbConferenceSlots, Long nbConferenceProposals, Long nbTwitterFollowers) {
-        this.name = name;
-        this.nbConferenceSlots = nbConferenceSlots;
-        this.nbConferenceProposals = nbConferenceProposals;
-        this.nbTwitterFollowers = nbTwitterFollowers;
-    }
-
-    /**
-     * Init des stats d'une conference
-     *
-     * @param nbHourToSellTicket
-     * @param nbAttendees
-     * @param nbConferenceSlot
-     * @param nbConferenceProposals
-     * @param nbTwitterFollowers
-     */
-    public void initConferenceStat(Long nbHourToSellTicket, Long nbAttendees, Long nbConferenceSlot, Long nbConferenceProposals, Long nbTwitterFollowers) {
-        this.nbHoursToSellTicket = nbHourToSellTicket;
-        this.nbAttendees = nbAttendees;
-        this.nbConferenceSlots = nbConferenceSlot;
-        this.nbConferenceProposals = nbConferenceProposals;
-        this.nbTwitterFollowers = nbTwitterFollowers;
-    }
-
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public Conference setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public Conference setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getStreetAdress() {
         return streetAdress;
     }
 
-    public void setStreetAdress(String streetAdress) {
+    public Conference setStreetAdress(String streetAdress) {
         this.streetAdress = streetAdress;
+        return this;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public Conference setCity(String city) {
         this.city = city;
+        return this;
     }
 
     public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(String postalCode) {
+    public Conference setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+        return this;
     }
 
     public Country getCountry() {
         return country;
     }
 
-    public void setCountry(Country country) {
+    public Conference setCountry(Country country) {
         this.country = country;
+        return this;
     }
 
     public Date getDateStart() {
         return dateStart;
     }
 
-    public void setDateStart(Date dateStart) {
+    public Conference setDateStart(Date dateStart) {
         this.dateStart = dateStart;
+        return this;
     }
 
     public Date getDateEnd() {
         return dateEnd;
     }
 
-    public void setDateEnd(Date dateEnd) {
+    public Conference setDateEnd(Date dateEnd) {
         this.dateEnd = dateEnd;
+        return this;
     }
 
     public Set<Talk> getTalks() {
         return talks;
     }
 
-    public void setTalks(Set<Talk> talks) {
+    public Conference setTalks(Set<Talk> talks) {
         this.talks = talks;
+        return this;
     }
 
     public Long getVersion() {
         return version;
     }
 
-    public void setVersion(Long version) {
+    public Conference setVersion(Long version) {
         this.version = version;
+        return this;
     }
 
     public Long getNbHoursToSellTicket() {
         return nbHoursToSellTicket;
     }
 
-    public void setNbHoursToSellTicket(Long nbHoursToSellTicket) {
+    public Conference setNbHoursToSellTicket(Long nbHoursToSellTicket) {
         this.nbHoursToSellTicket = nbHoursToSellTicket;
+        return this;
     }
 
     public Long getNbAttendees() {
         return nbAttendees;
     }
 
-    public void setNbAttendees(Long nbAttendees) {
+    public Conference setNbAttendees(Long nbAttendees) {
         this.nbAttendees = nbAttendees;
+        return this;
     }
 
     public Long getNbConferenceSlots() {
         return nbConferenceSlots;
     }
 
-    public void setNbConferenceSlots(Long nbConferenceSlots) {
+    public Conference setNbConferenceSlots(Long nbConferenceSlots) {
         this.nbConferenceSlots = nbConferenceSlots;
+        return this;
     }
 
     public Long getNbConferenceProposals() {
         return nbConferenceProposals;
     }
 
-    public void setNbConferenceProposals(Long nbConferenceProposals) {
+    public Conference setNbConferenceProposals(Long nbConferenceProposals) {
         this.nbConferenceProposals = nbConferenceProposals;
+        return this;
     }
 
     public Long getNbTwitterFollowers() {
         return nbTwitterFollowers;
     }
 
-    public void setNbTwitterFollowers(Long nbTwitterFollowers) {
+    public Conference setNbTwitterFollowers(Long nbTwitterFollowers) {
         this.nbTwitterFollowers = nbTwitterFollowers;
+        return this;
     }
 
     public Double getProposalsRatio() {
@@ -220,12 +192,18 @@ public class Conference {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
 
         Conference that = (Conference) o;
 
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null){
+            return false;
+        }
 
         return true;
     }

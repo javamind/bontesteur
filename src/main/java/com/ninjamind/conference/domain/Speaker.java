@@ -36,111 +36,116 @@ public class Speaker {
     public Speaker() {
     }
 
-    public Speaker(Long id) {
-        this.id=id;
-    }
-
-    public Speaker(String firstname, String lastname) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-    }
-
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public Speaker setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getFirstname() {
         return firstname;
     }
 
-    public void setFirstname(String firstname) {
+    public Speaker setFirstname(String firstname) {
         this.firstname = firstname;
+        return this;
     }
 
     public String getLastname() {
         return lastname;
     }
 
-    public void setLastname(String lastname) {
+    public Speaker setLastname(String lastname) {
         this.lastname = lastname;
+        return this;
     }
 
     public String getCompany() {
         return company;
     }
 
-    public void setCompany(String company) {
+    public Speaker setCompany(String company) {
         this.company = company;
+        return this;
     }
 
     public String getStreetAdress() {
         return streetAdress;
     }
 
-    public void setStreetAdress(String streetAdress) {
+    public Speaker setStreetAdress(String streetAdress) {
         this.streetAdress = streetAdress;
+        return this;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public Speaker setCity(String city) {
         this.city = city;
+        return this;
     }
 
     public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(String postalCode) {
+    public Speaker setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+        return this;
     }
 
     public Country getCountry() {
         return country;
     }
 
-    public void setCountry(Country country) {
+    public Speaker setCountry(Country country) {
         this.country = country;
+        return this;
     }
 
     public Set<Talk> getTalks() {
         return talks;
     }
 
-    public void setTalks(Set<Talk> talks) {
+    public Speaker setTalks(Set<Talk> talks) {
         this.talks = talks;
+        return this;
     }
 
     public Long getVersion() {
         return version;
     }
 
-    public void setVersion(Long version) {
+    public Speaker setVersion(Long version) {
         this.version = version;
+        return this;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
 
         Speaker speaker = (Speaker) o;
 
-        if (city != null ? !city.equals(speaker.city) : speaker.city != null) return false;
-        if (company != null ? !company.equals(speaker.company) : speaker.company != null) return false;
-        if (country != null ? !country.equals(speaker.country) : speaker.country != null) return false;
-        if (!firstname.equals(speaker.firstname)) return false;
-        if (!lastname.equals(speaker.lastname)) return false;
-        if (postalCode != null ? !postalCode.equals(speaker.postalCode) : speaker.postalCode != null) return false;
-        if (streetAdress != null ? !streetAdress.equals(speaker.streetAdress) : speaker.streetAdress != null)
+        if (!firstname.equals(speaker.firstname)){
             return false;
-        if (talks != null ? !talks.equals(speaker.talks) : speaker.talks != null) return false;
+        }
+        if (!lastname.equals(speaker.lastname)){
+            return false;
+        }
+        if (postalCode != null ? !postalCode.equals(speaker.postalCode) : speaker.postalCode != null){
+            return false;
+        }
 
         return true;
     }

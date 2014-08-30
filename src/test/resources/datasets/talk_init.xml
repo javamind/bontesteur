@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <dataset>
-    <TALK id="1" name="Le bon testeur il teste... le mauvais testeur il teste..." dateStart="2014-04-18 13:30:00.0" dateEnd="2014-04-18 14:20:00.0"  status="Active"/>
-    <TALK id="2" name="La conf passee" dateStart="2010-04-18 13:30:00.0" dateEnd="2010-04-18 14:20:00.0"  status="Active"/>
+    <TALK id="1" name="Le bon testeur il teste... le mauvais testeur il teste..." dateStart="2014-04-18 13:30:00.0" dateEnd="2014-04-18 14:20:00.0"  status="ACTIVE"/>
+    <TALK id="2" name="La conf passee" dateStart="2010-04-18 13:30:00.0" dateEnd="2010-04-18 14:20:00.0"  status="ACTIVE"/>
 </dataset>

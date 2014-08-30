@@ -23,9 +23,8 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class TalkServiceImpl implements TalkService
-{
-    private static Logger LOG = LoggerFactory.make();
+public class TalkServiceImpl implements TalkService {
+    private static final Logger LOG = LoggerFactory.make();
 
     @Autowired
     private TalkRepository talkRepository;

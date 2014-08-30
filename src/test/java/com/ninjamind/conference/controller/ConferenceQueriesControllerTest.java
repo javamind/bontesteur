@@ -21,14 +21,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
- * Test du controller {@link com.ninjamind.conference.controller.ConferenceQueriesController}
+ * Test du controller {@link com.ninjamind.conference.controller.ConferenceController}
  * @author ehret_g
  */
 public class ConferenceQueriesControllerTest {
     MockMvc mockMvc;
 
     @InjectMocks
-    ConferenceQueriesController controller;
+    ConferenceController controller;
 
     @Mock
     ConferenceService conferenceService;
@@ -49,10 +49,7 @@ public class ConferenceQueriesControllerTest {
 
         //Le service renvoie une entite
         when(conferenceService.getConference(any(Conference.class))).thenReturn(
-                new Conference(
-                                "Mix-IT",
-                                new Date(0),
-                                new Date(0)));
+                new Conference().setName("Mix-IT").setDateStart(new Date(0)).setDateEnd(new Date(0)));
 
         //L'appel de l'URL doit retourner un status 200
         mockMvc.perform(get("/conferences/{id}", idCherche))
@@ -87,14 +84,9 @@ public class ConferenceQueriesControllerTest {
     @Test
     public void shouldReturnListEntityWhenSearchAllConference() throws Exception {
         List<Conference> listExpected = Lists.newArrayList (
-                new Conference(
-                    "Mix-IT",
-                    new Date(0),
-                    new Date(0)),
-                new Conference(
-                        "Devoxx",
-                        new Date(0),
-                        new Date(0)));
+                new Conference().setName("Mix-IT").setDateStart(new Date(0)).setDateEnd(new Date(0)),
+                new Conference().setName("Devoxx").setDateStart(new Date(0)).setDateEnd(new Date(0)));
+
 
         //Le service renvoie une entite
         when(conferenceService.getAllConference()).thenReturn(listExpected);

@@ -31,65 +31,16 @@ public class ConferenceDetail implements Serializable {
     public ConferenceDetail() {
     }
 
-    /**
-     * @param id
-     * @param name
-     * @param start
-     * @param end
-     */
-    public ConferenceDetail(Long id, String name, String start, String end) {
-        this.id = id;
-        this.name = name;
-        this.dateStart = start;
-        this.dateEnd = end;
-    }
-
-    /**
-     * @param id
-     * @param name
-     * @param streetAdress
-     * @param city
-     * @param postalCode
-     * @param codeCountry
-     * @param dateStart
-     * @param dateEnd
-     */
-    public ConferenceDetail(Long id, String name, String streetAdress, String city, String postalCode, String codeCountry, String dateStart, String dateEnd) {
-        this(id, name, dateStart, dateEnd);
-        this.streetAdress = streetAdress;
-        this.city = city;
-        this.postalCode = postalCode;
-        this.codeCountry = codeCountry;
-    }
-
 
     public ConferenceDetail(Conference conference) {
-        this(
-                conference.getId(),
-                conference.getName(),
-                conference.getStreetAdress(),
-                conference.getCity(),
-                conference.getPostalCode(),
-                conference.getCountry() != null ? conference.getCountry().getCode() : null,
-                Utils.dateJavaToJson(conference.getDateStart()),
-                Utils.dateJavaToJson(conference.getDateEnd())
-        );
-    }
-
-    /**
-     * Init des stats d'une conference
-     * @param nbHourToSellTicket
-     * @param nbAttendees
-     * @param nbConferenceSlot
-     * @param nbConferenceProposals
-     * @param nbTwitterFollowers
-     */
-    public void initConferenceStat(Long nbHourToSellTicket, Long nbAttendees, Long nbConferenceSlot, Long nbConferenceProposals, Long nbTwitterFollowers) {
-        this.nbHourToSellTicket = nbHourToSellTicket;
-        this.nbAttendees = nbAttendees;
-        this.nbConferenceSlot = nbConferenceSlot;
-        this.nbConferenceProposals = nbConferenceProposals;
-        this.nbTwitterFollowers = nbTwitterFollowers;
+        this.id = conference.getId();
+        this.name = conference.getName();
+        this.dateStart = Utils.dateJavaToJson(conference.getDateStart());
+        this.dateEnd = Utils.dateJavaToJson(conference.getDateEnd());
+        this.streetAdress = conference.getStreetAdress();
+        this.city = conference.getCity();
+        this.postalCode = conference.getPostalCode();
+        this.codeCountry = conference.getCountry() != null ? conference.getCountry().getCode() : null;
     }
 
     /**
@@ -97,72 +48,136 @@ public class ConferenceDetail implements Serializable {
      * @return
      */
     public Conference toConference() {
-        Conference conference = new Conference(
-                getName(),
-                Utils.dateJsonToJava(getDateStart()),
-                Utils.dateJsonToJava(getDateEnd()));
-        conference.setId(id);
-        conference.setStreetAdress(streetAdress);
-        conference.setCity(city);
-        conference.setPostalCode(postalCode);
-        conference.setCountry(new Country(codeCountry, null));
-        conference.setNbTwitterFollowers(nbTwitterFollowers);
-        conference.setNbAttendees(nbAttendees);
-        conference.setNbHoursToSellTicket(nbHourToSellTicket);
-        conference.setNbConferenceSlots(nbConferenceSlot);
-        conference.setNbConferenceProposals(nbConferenceProposals);
-        return conference;
+        return new Conference()
+                .setName(getName())
+                .setDateStart(Utils.dateJsonToJava(getDateStart()))
+                .setDateEnd(Utils.dateJsonToJava(getDateEnd()))
+                .setId(id)
+                .setStreetAdress(streetAdress)
+                .setCity(city)
+                .setPostalCode(postalCode)
+                .setCountry(new Country().setCode(codeCountry))
+                .setNbTwitterFollowers(nbTwitterFollowers)
+                .setNbAttendees(nbAttendees)
+                .setNbHoursToSellTicket(nbHourToSellTicket)
+                .setNbConferenceSlots(nbConferenceSlot)
+                .setNbConferenceProposals(nbConferenceProposals);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public ConferenceDetail setId(Long id) {
+        this.id = id;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
+    public ConferenceDetail setName(String name) {
+        this.name = name;
+        return this;
+    }
+
     public String getStreetAdress() {
         return streetAdress;
+    }
+
+    public ConferenceDetail setStreetAdress(String streetAdress) {
+        this.streetAdress = streetAdress;
+        return this;
     }
 
     public String getCity() {
         return city;
     }
 
+    public ConferenceDetail setCity(String city) {
+        this.city = city;
+        return this;
+    }
+
     public String getPostalCode() {
         return postalCode;
+    }
+
+    public ConferenceDetail setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+        return this;
     }
 
     public String getCodeCountry() {
         return codeCountry;
     }
 
+    public ConferenceDetail setCodeCountry(String codeCountry) {
+        this.codeCountry = codeCountry;
+        return this;
+    }
+
     public String getDateStart() {
         return dateStart;
+    }
+
+    public ConferenceDetail setDateStart(String dateStart) {
+        this.dateStart = dateStart;
+        return this;
     }
 
     public String getDateEnd() {
         return dateEnd;
     }
 
+    public ConferenceDetail setDateEnd(String dateEnd) {
+        this.dateEnd = dateEnd;
+        return this;
+    }
+
     public Long getNbHourToSellTicket() {
         return nbHourToSellTicket;
+    }
+
+    public ConferenceDetail setNbHourToSellTicket(Long nbHourToSellTicket) {
+        this.nbHourToSellTicket = nbHourToSellTicket;
+        return this;
     }
 
     public Long getNbAttendees() {
         return nbAttendees;
     }
 
+    public ConferenceDetail setNbAttendees(Long nbAttendees) {
+        this.nbAttendees = nbAttendees;
+        return this;
+    }
+
     public Long getNbConferenceSlot() {
         return nbConferenceSlot;
+    }
+
+    public ConferenceDetail setNbConferenceSlot(Long nbConferenceSlot) {
+        this.nbConferenceSlot = nbConferenceSlot;
+        return this;
     }
 
     public Long getNbConferenceProposals() {
         return nbConferenceProposals;
     }
 
+    public ConferenceDetail setNbConferenceProposals(Long nbConferenceProposals) {
+        this.nbConferenceProposals = nbConferenceProposals;
+        return this;
+    }
+
     public Long getNbTwitterFollowers() {
         return nbTwitterFollowers;
     }
 
-    public Long getId() {
-        return id;
+    public ConferenceDetail setNbTwitterFollowers(Long nbTwitterFollowers) {
+        this.nbTwitterFollowers = nbTwitterFollowers;
+        return this;
     }
 }

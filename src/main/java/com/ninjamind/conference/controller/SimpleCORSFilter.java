@@ -16,7 +16,7 @@ public class SimpleCORSFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
+        //NOSONAR
     }
 
     @Override
@@ -31,6 +31,6 @@ public class SimpleCORSFilter implements Filter {
 
     @Override
     public void destroy() {
-
+        //NOSONAR
     }
 }

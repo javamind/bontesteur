@@ -61,10 +61,10 @@ public class DefaultFavoriteServiceCibleTest {
      * @return les paramètres des tests
      */
     protected Object[] conferenceValues() {
-        Conference devoxx2014 = new Conference("Devoxx2014", 154L, 658L);
-        Conference mixit2014 = new Conference("Mix-IT2014", 30L, 200L, 845L);
-        Conference jugsummercamp2014 = new Conference("JugSummerCamp2014", 12L, 97L);
-        Conference mixit2014WithoutParam = new Conference("Mix-IT2014", null, 200L);
+        Conference devoxx2014 = new Conference().setName("Devoxx2014").setNbConferenceSlots(154L).setNbConferenceProposals(658L);
+        Conference mixit2014 = new Conference().setName("Mix-IT2014").setNbConferenceSlots(30L).setNbConferenceProposals(200L).setNbTwitterFollowers(845L);
+        Conference jugsummercamp2014 = new Conference().setName("JugSummerCamp2014").setNbConferenceSlots(12L).setNbConferenceProposals(97L);
+        Conference mixit2014WithoutParam = new Conference().setName("Mix-IT2014").setNbConferenceProposals(200L);
 
         return $(
                 //Avec les vraies valeurs : mixit2014 est la plus hype

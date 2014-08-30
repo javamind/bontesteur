@@ -96,9 +96,17 @@ public class ConferenceServiceImplTestNgTest {
      * @param nbTwitterFollowers
      */
     private void addConference(List<Conference> conferences, String name, Long nbHourToSellTicket, Long nbAttendees, Long nbConferenceSlot, Long nbConferenceProposals, Long nbTwitterFollowers) {
-        Conference conferenceCreated = new Conference(name, new DateTime(2014, 4, 29, 9, 0).toDate(), new DateTime(2014, 4, 30, 19, 0).toDate());
-        conferenceCreated.initConferenceStat(nbHourToSellTicket, nbAttendees, nbConferenceSlot, nbConferenceProposals, nbTwitterFollowers);
-        conferences.add(conferenceCreated);
+        conferences.add(
+                new Conference()
+                        .setName(name)
+                        .setDateStart(new DateTime(2014, 4, 29, 9, 0).toDate())
+                        .setDateEnd(new DateTime(2014, 4, 30, 19, 0).toDate())
+                        .setNbHoursToSellTicket(nbHourToSellTicket)
+                        .setNbAttendees(nbAttendees)
+                        .setNbConferenceSlots(nbConferenceSlot)
+                        .setNbConferenceProposals(nbConferenceProposals)
+                        .setNbTwitterFollowers(nbTwitterFollowers)
+        );
     }
 
     /**

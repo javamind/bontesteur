@@ -1,11 +1,7 @@
 package com.ninjamind.conference.repository;
 
-import com.ninjamind.conference.domain.Country;
 import com.ninjamind.conference.domain.Talk;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 

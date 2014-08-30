@@ -36,15 +36,15 @@ public class TalkServiceImplProblemMockCibleTest {
     @Test
     public void shouldCreateTalk(){
         //La sauvegarde du talk retournera une instance avec un id
-        Talk talkCreated = new Talk(CONF_NAME);
+        Talk talkCreated = new Talk().setName(CONF_NAME);
         talkCreated.setId(2345L);
         when(talkRepository.save(any(Talk.class))).thenReturn(talkCreated);
 
         //On appelle notre service de creation
-        CreatedEvent<Talk> createdTalkEvent = service.createTalk(new Talk(CONF_NAME));
+        CreatedEvent<Talk> createdTalkEvent = service.createTalk(new Talk().setName(CONF_NAME));
 
         //On ne verifie pas le contenu de l'objet car on sait ce que l'on recoit vu qu'on le
-        //défini juste avant
+        //dï¿½fini juste avant
         assertThat(createdTalkEvent.getValue()).isNotNull();
     }
 

@@ -1,5 +1,5 @@
 protected Object[] conferenceValues() {
-        Conference devoxx2014 = new Conference("Devoxx2014", 154L, 658L);
+        Conference devoxx2014 = new Conference().setName("Devoxx2014").setNbConferenceSlots(154L).setNbConferenceProposals(658L);
         Conference mixit2014 = new Conference("Mix-IT2014", 30L, 200L);
         Conference jugsummercamp2014 = new Conference("JugSummerCamp2014", 10L, 130L);
         Conference mixit2014WithoutParam = new Conference("Mix-IT2014", null, 200L);
@@ -22,6 +22,6 @@ AbstractTransactionalJUnit4SpringContextTests
 
 insertInto("talk")
 .columns("id", "name", "status", "dateStart", "dateEnd")
-    .values(1L, "Le bon testeur il teste", Status.Active, new DateTime(2014,4,18,13,30).toDate(), new DateTime(2014,4,18,14,20).toDate())
-    .values(2L, "La conf passee", Status.Active, new DateTime(2010,4,18,13,30).toDate(), new DateTime(2010,4,18,14,20).toDate())
+    .values(1L, "Le bon testeur il teste", Status.ACTIVE, new DateTime(2014,4,18,13,30).toDate(), new DateTime(2014,4,18,14,20).toDate())
+    .values(2L, "La conf passee", Status.ACTIVE, new DateTime(2010,4,18,13,30).toDate(), new DateTime(2010,4,18,14,20).toDate())
     .build()

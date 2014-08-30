@@ -18,6 +18,7 @@ public class ExceptionControllerAdvice {
      * Logger commun a la publication
      */
     private static final Logger LOG = LoggerFactory.make();
+    public static final String PERSISTENCE_ERROR = "Persistence error : ";
 
     /**
      * Traitement des erreurs de persistence
@@ -27,16 +28,17 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<String> handleException(JpaSystemException  e){
         //L'excpetion  JpaSystemException et liée à une {@link javax.persistence.PersistenceException} qui elle même encapsule
         //des exceptions plus précises
+        //NOSONAR
         if(e.getCause()!=null && e.getCause().getCause()!=null){
             switch (e.getCause().getCause().getClass().toString()){
                 case "org.hibernate.PropertyValueException":
-                    return new ResponseEntity("Persistence error : " + e.getCause().getMessage(), HttpStatus.NOT_ACCEPTABLE);
+                    return new ResponseEntity(PERSISTENCE_ERROR + e.getCause().getMessage(), HttpStatus.NOT_ACCEPTABLE);
                 case "javax.persistence.NoResultException":
                 case "javax.persistence.EntityNotFoundException":
-                    return new ResponseEntity("Persistence error : " + e.getCause().getMessage(), HttpStatus.NOT_FOUND);
+                    return new ResponseEntity(PERSISTENCE_ERROR + e.getCause().getMessage(), HttpStatus.NOT_FOUND);
             }
         }
-        return new ResponseEntity("Persistence error : " + e.getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity(PERSISTENCE_ERROR + e.getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**

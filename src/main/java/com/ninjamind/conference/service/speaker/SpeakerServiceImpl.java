@@ -23,9 +23,8 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class SpeakerServiceImpl implements SpeakerService
-{
-    private static Logger LOG = LoggerFactory.make();
+public class SpeakerServiceImpl implements SpeakerService {
+    private static final Logger LOG = LoggerFactory.make();
 
     @Autowired
     private SpeakerRepository speakerRepository;

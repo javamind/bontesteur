@@ -20,7 +20,7 @@ Fonctionnellement, cette petite application simule une gestion des conférences 
 Au niveau de la stack technique nous utilisons
 
 * postgresql 9.1
-* spring core, test et webmvc : 4.0.5.RELEASE
+* spring core, test et webmvc : 4.0.6.RELEASE
 * spring data jpa : 1.5.0.RELEASE
 * hibernate 4.3.6.Final
 * javax.servlet-api : 3.0.1
@@ -33,4 +33,8 @@ Mais aussi des librairies pour vous aider dans vos tests
 * JUnitParams 1.0.3
 * Mockito 1.9.5
 * ...
+
+Pour la base de données nous utilisons Flyway. Si vous voulez l'initialiser vous devrez lancer le goal maven
+
+mvn flyway:clean flyway:migrate
 

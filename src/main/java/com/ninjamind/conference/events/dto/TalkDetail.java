@@ -5,11 +5,7 @@ import com.ninjamind.conference.domain.Status;
 import com.ninjamind.conference.domain.Talk;
 import com.ninjamind.conference.utils.Utils;
 
-import javax.persistence.Column;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Objet de transit lie
@@ -34,50 +30,30 @@ public class TalkDetail implements Serializable {
     public TalkDetail() {
     }
 
-    /**
-     * @param id
-     * @param name
-     */
-    public TalkDetail(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public TalkDetail(Long id, String name, String description, String place, Integer nbpeoplemax, String level) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.place = place;
-        this.nbpeoplemax = nbpeoplemax;
-        this.level = level;
-
-    }
 
     public TalkDetail(Talk talk) {
-        this(
-                talk.getId(),
-                talk.getName(),
-                talk.getDescription(),
-                talk.getPlace(),
-                talk.getNbpeoplemax(),
-                talk.getLevel() != null ? talk.getLevel().toString() : null
-        );
+        this.id = talk.getId();
+        this.name = talk.getName();
+        this.description = talk.getDescription();
+        this.place = talk.getPlace();
+        this.nbpeoplemax = talk.getNbpeoplemax();
+        this.level = talk.getLevel() != null ? talk.getLevel().toString() : null;
         this.setDateStart(Utils.dateJavaToJson(talk.getDateStart()));
         this.setDateEnd(Utils.dateJavaToJson(talk.getDateEnd()));
         this.setStatus(talk.getStatus()!=null ? talk.getStatus().toString() : null);
     }
 
     public Talk toTalk() {
-        Talk talk = new Talk(name);
-        talk.setId(id);
-        talk.setDescription(description);
-        talk.setPlace(place);
-        talk.setNbpeoplemax(nbpeoplemax);
-        talk.setLevel(level!=null ? Level.valueOf(level) : null);
-        talk.setDateStart(Utils.dateJsonToJava(getDateStart()));
-        talk.setDateEnd(Utils.dateJsonToJava(getDateEnd()));
-        talk.setStatus(status!=null ? Status.valueOf(status) : null);
-        return talk;
+        return new Talk()
+                .setName(name)
+                .setId(id)
+                .setDescription(description)
+                .setPlace(place)
+                .setNbpeoplemax(nbpeoplemax)
+                .setLevel(level!=null ? Level.valueOf(level) : null)
+                .setDateStart(Utils.dateJsonToJava(getDateStart()))
+                .setDateEnd(Utils.dateJsonToJava(getDateEnd()))
+                .setStatus(status!=null ? Status.valueOf(status) : null);
     }
 
     public String getStatus() {
