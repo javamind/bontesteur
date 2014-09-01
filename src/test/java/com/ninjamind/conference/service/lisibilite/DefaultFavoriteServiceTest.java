@@ -1,13 +1,12 @@
 package com.ninjamind.conference.service.lisibilite;
 
 import com.ninjamind.conference.domain.Conference;
+import com.ninjamind.conference.exception.ConferenceNotFoundException;
 import com.ninjamind.conference.repository.ConferenceRepository;
 import com.ninjamind.conference.service.DefaultFavoriteService;
-import junitparams.JUnitParamsRunner;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -16,14 +15,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 /**
  * Test de la class {@link com.ninjamind.conference.service.DefaultFavoriteService}
  */
-@RunWith(JUnitParamsRunner.class)
 public class DefaultFavoriteServiceTest {
     @Mock
     private ConferenceRepository conferenceRepository;
@@ -37,14 +34,12 @@ public class DefaultFavoriteServiceTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
     }
-
     /**
-     * Test de la methode {@link DefaultFavoriteService#getTheHypestConfs()}
+     * Test de la methode {@link com.ninjamind.conference.service.DefaultFavoriteService#getTheHypestConfs()}
      * cas ou une valeur est retournee
      */
     @Test
-    public void shouldFindTheHypestConf() throws Exception {
-
+    public void testTheHypestConfOK() throws Exception {
 
         ///////////////  premier cas de test : Devoxx2014 + Mix-IT2014
         Conference devoxx2014 = new Conference().setName("Devoxx2014").setNbConferenceSlots(154L).setNbConferenceProposals(658L);
@@ -80,7 +75,7 @@ public class DefaultFavoriteServiceTest {
         /////////////// troisième cas de test : Devoxx2014 + Mix-IT2014 sans un parametre
         conferences.clear();
         conferences.add(devoxx2014);
-        Conference mixit2014WithoutParam = new Conference().setName("Mix-IT2014").setNbConferenceProposals(97L);
+        Conference mixit2014WithoutParam = new Conference().setName("Mix-IT2014").setNbConferenceProposals(200L);
         conferences.add(mixit2014WithoutParam);
 
         when(conferenceRepository.findAll()).thenReturn(conferences);
@@ -93,18 +88,20 @@ public class DefaultFavoriteServiceTest {
         assertEquals(expected3, confNames3);
     }
 
+
+
     /**
-     * Test de la methode {@link DefaultFavoriteService#getTheHypestConfs}
+     * Test de la methode {@link com.ninjamind.conference.service.DefaultFavoriteService#getTheHypestConfs}
      * cas ou aucune conference n'existe
      */
     @Test
-    public void shouldThrowsExceptionWhenNoData() {
+    public void testTheHypestConfKO() {
         when(conferenceRepository.findAll()).thenReturn(conferences);
 
         try {
             defaultFavoriteService.getTheHypestConfs();
             Assert.fail();
-        } catch (Exception e) {
+        } catch (ConferenceNotFoundException e) {
             assertEquals("Aucune conference evaluee", e.getMessage());
         }
     }

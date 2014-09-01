@@ -1,6 +1,7 @@
 package com.ninjamind.conference.service.lisibilite.sav;
 
 import com.ninjamind.conference.domain.Conference;
+import com.ninjamind.conference.exception.ConferenceNotFoundException;
 import com.ninjamind.conference.repository.ConferenceRepository;
 import com.ninjamind.conference.service.DefaultFavoriteService;
 import org.junit.Assert;
@@ -100,7 +101,7 @@ public class DefaultFavoriteServiceAvantModifTest {
         try {
             defaultFavoriteService.getTheHypestConfs();
             Assert.fail();
-        } catch (Exception e) {
+        } catch (ConferenceNotFoundException e) {
             assertEquals("Aucune conference evaluee", e.getMessage());
         }
     }

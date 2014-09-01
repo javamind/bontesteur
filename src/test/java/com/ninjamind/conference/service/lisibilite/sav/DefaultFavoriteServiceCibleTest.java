@@ -2,6 +2,7 @@ package com.ninjamind.conference.service.lisibilite.sav;
 
 import com.google.common.collect.Lists;
 import com.ninjamind.conference.domain.Conference;
+import com.ninjamind.conference.exception.ConferenceNotFoundException;
 import com.ninjamind.conference.repository.ConferenceRepository;
 import com.ninjamind.conference.service.DefaultFavoriteService;
 import junitparams.JUnitParamsRunner;
@@ -116,7 +117,7 @@ public class DefaultFavoriteServiceCibleTest {
         try {
             defaultFavoriteService.getTheHypestConfs();
             failBecauseExceptionWasNotThrown(Exception.class);
-        } catch (Exception e) {
+        } catch (ConferenceNotFoundException e) {
             assertThat(e).hasMessage("Aucune conference evaluee").hasNoCause();
         }
     }
