@@ -1,5 +1,6 @@
 package com.ninjamind.conference.controller;
 
+import com.google.common.collect.Lists;
 import com.ninjamind.conference.domain.Conference;
 import com.ninjamind.conference.events.CreatedEvent;
 import com.ninjamind.conference.events.DeletedEvent;
@@ -14,11 +15,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Date;
+import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
@@ -26,7 +30,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
  *  Test du controller {@link com.ninjamind.conference.controller.ConferenceController}
  * @author ehret_g
  */
-public class ConferenceCommandsControllerTest {
+public class ConferenceControllerTest {
     MockMvc mockMvc;
 
     @InjectMocks
@@ -64,7 +68,7 @@ public class ConferenceCommandsControllerTest {
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
-                post("/conferences")
+                post("/conference")
                         .content(generateConferenceJson(null, "Mix-IT"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -73,7 +77,7 @@ public class ConferenceCommandsControllerTest {
     }
 
     /**
-     * Test de la creation d'une conference via l'API REST : <code>/conferences</code>. On teste le cas ou on a une erreur sur
+     * Test de la creation d'une conference via l'API REST : <code>/conference</code>. On teste le cas ou on a une erreur sur
      * les donnees
      * @throws Exception
      */
@@ -85,7 +89,7 @@ public class ConferenceCommandsControllerTest {
 
         //L'appel de l'URL doit retourner un status 406 si donn�es inavlide
         mockMvc.perform(
-                post("/conferences")
+                post("/conference")
                         .content(generateConferenceJson(null, "Mix-IT"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -94,7 +98,7 @@ public class ConferenceCommandsControllerTest {
     }
 
     /**
-     * Test de la mise a jour d'une conference via l'API REST : <code>/conferences</code>. On teste le cas passant
+     * Test de la mise a jour d'une conference via l'API REST : <code>/conference</code>. On teste le cas passant
      * @throws Exception
      */
     @Test
@@ -105,7 +109,7 @@ public class ConferenceCommandsControllerTest {
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
-                put("/conferences")
+                put("/conference")
                         .content(generateConferenceJson("1", "Mix-IT"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -114,7 +118,7 @@ public class ConferenceCommandsControllerTest {
     }
 
     /**
-     * Test de la mise a jour d'une conference via l'API REST : <code>/conferences</code>. On teste le cas ou la donn�e n'existe pas
+     * Test de la mise a jour d'une conference via l'API REST : <code>/conference</code>. On teste le cas ou la donn�e n'existe pas
      * @throws Exception
      */
     @Test
@@ -125,7 +129,7 @@ public class ConferenceCommandsControllerTest {
 
         //L'appel de l'URL doit retourner un status 404 si donn�es non trouvee
         mockMvc.perform(
-                put("/conferences")
+                put("/conference")
                         .content(generateConferenceJson("1", "Mix-IT"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -134,7 +138,7 @@ public class ConferenceCommandsControllerTest {
     }
 
     /**
-     * Test de la mise a jour d'une conference via l'API REST : <code>/conferences</code>. On teste le cas ou on a une erreur sur
+     * Test de la mise a jour d'une conference via l'API REST : <code>/conference</code>. On teste le cas ou on a une erreur sur
      * les donnees
      * @throws Exception
      */
@@ -146,7 +150,7 @@ public class ConferenceCommandsControllerTest {
 
         //L'appel de l'URL doit retourner un status 406 si donn�es invalide
         mockMvc.perform(
-                put("/conferences")
+                put("/conference")
                         .content(generateConferenceJson("1", "Mix-IT"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -155,7 +159,7 @@ public class ConferenceCommandsControllerTest {
     }
 
     /**
-     * Test de la suppression d'une conference via l'API REST : <code>/conferences</code>. On teste le cas passant
+     * Test de la suppression d'une conference via l'API REST : <code>/conference</code>. On teste le cas passant
      * @throws Exception
      */
     @Test
@@ -166,7 +170,7 @@ public class ConferenceCommandsControllerTest {
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
-                delete("/conferences/{id}", "1")
+                delete("/conference/{id}", "1")
                         .content(generateConferenceJson("1", "Mix-IT"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -175,7 +179,7 @@ public class ConferenceCommandsControllerTest {
     }
 
     /**
-     * Test de la suppression d'une conference via l'API REST : <code>/conferences</code>. On teste le cas ou la donn�e n'existe pas
+     * Test de la suppression d'une conference via l'API REST : <code>/conference</code>. On teste le cas ou la donn�e n'existe pas
      * @throws Exception
      */
     @Test
@@ -186,11 +190,71 @@ public class ConferenceCommandsControllerTest {
 
         //L'appel de l'URL doit retourner un status 404 si donn�es non trouvee
         mockMvc.perform(
-                delete("/conferences/{id}", "1")
+                delete("/conference/{id}", "1")
                         .content(generateConferenceJson("1", "Mix-IT"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+    }
+
+    /**
+     * Test de la recuperation d'une conference via l'API REST : <code>/conference/{id}</code>. On teste le cas passant
+     * @throws Exception
+     */
+    @Test
+    public void shouldReturnEntityWhenSearchByIdValid() throws Exception {
+        String idCherche = "1";
+
+        //Le service renvoie une entite
+        when(conferenceService.getConference(any(Conference.class))).thenReturn(
+                new Conference().setName("Mix-IT").setDateStart(new Date(0)).setDateEnd(new Date(0)));
+
+        //L'appel de l'URL doit retourner un status 200
+        mockMvc.perform(get("/conference/{id}", idCherche))
+                .andDo(print())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("name").value("Mix-IT"))
+                .andExpect(status().isOk());
+    }
+
+    /**
+     * Test de la recuperation d'une conference via l'API REST : <code>/conference/{id}</code>. On teste le cas oe l'enregistrement
+     * n'existe pas
+     * @throws Exception
+     */
+    @Test
+    public void shouldReturnNotFoundStatusWhenSearchByIdInvalid() throws Exception {
+        //Le service renvoie une entite
+        when(conferenceService.getConference(any(Conference.class))).thenReturn(
+                null);
+
+        //L'appel de l'URL doit retourner un status 200
+        mockMvc.perform(get("/conference/{id}", "1"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    /**
+     * Test de la recuperation de toutes les conferences via l'API REST : <code>/conference</code>. On teste le cas passant
+     *
+     * @throws Exception
+     */
+    @Test
+    public void shouldReturnListEntityWhenSearchAllConference() throws Exception {
+        List<Conference> listExpected = Lists.newArrayList(
+                new Conference().setName("Mix-IT").setDateStart(new Date(0)).setDateEnd(new Date(0)),
+                new Conference().setName("Devoxx").setDateStart(new Date(0)).setDateEnd(new Date(0)));
+
+
+        //Le service renvoie une entite
+        when(conferenceService.getAllConference()).thenReturn(listExpected);
+
+        //L'appel de l'URL doit retourner un status 200
+        mockMvc.perform(get("/conference"))
+                .andDo(print())
+                .andExpect(jsonPath("$[0].name").value("Mix-IT"))
+                .andExpect(jsonPath("$[1].name").value("Devoxx"))
+                .andExpect(status().isOk());
     }
 }

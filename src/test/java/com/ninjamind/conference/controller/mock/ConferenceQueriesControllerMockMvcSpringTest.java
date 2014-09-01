@@ -49,7 +49,7 @@ public class ConferenceQueriesControllerMockMvcSpringTest {
         when(conferenceService.getConference(any(Conference.class))).thenReturn(new Conference().setName("Mix-IT").setDateStart(new Date(0)).setDateEnd(new Date(0)));
 
         //L'appel de l'URL doit retourner un status 200
-        mockMvc.perform(get("/conferences/{id}", "1"))
+        mockMvc.perform(get("/conference/{id}", "1"))
                 .andDo(print())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("name").value("Mix-IT"))
@@ -64,7 +64,7 @@ public class ConferenceQueriesControllerMockMvcSpringTest {
         when(conferenceService.getConference(any(Conference.class))).thenReturn(null);
 
         //L'appel de l'URL doit retourner un status 404
-        mockMvc.perform(get("/conferences/{id}", "1"))
+        mockMvc.perform(get("/conference/{id}", "1"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

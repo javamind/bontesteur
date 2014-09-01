@@ -45,7 +45,7 @@ public class ConferenceQueriesControllerRestAssuredWithWraperSpringTest {
         given()
                 .standaloneSetup(controller)
         .when()
-                .get("/conferences/{id}", "1")
+                .get("/conference/{id}", "1")
         .then()
                 .statusCode(200)
                 .body("name", equalTo("Mix-IT"))
@@ -70,7 +70,7 @@ public class ConferenceQueriesControllerRestAssuredWithWraperSpringTest {
         given()
                 .standaloneSetup(controller)
         .when()
-                .get("/conferences/{id}", (String) "1")
+                .get("/conference/{id}", (String) "1")
         .then()
                 .statusCode(404);
 

@@ -58,7 +58,7 @@ public class SpeakerControllerTest {
     }
 
     /**
-     * Test de la creation d'une speaker via l'API REST : <code>/speakers</code>. On teste le cas passant
+     * Test de la creation d'une speaker via l'API REST : <code>/speaker</code>. On teste le cas passant
      * @throws Exception
      */
     @Test
@@ -68,7 +68,7 @@ public class SpeakerControllerTest {
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
-                post("/speakers")
+                post("/speaker")
                         .content(generateSpeakerJson(null, "Martin", "Fowler"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -77,7 +77,7 @@ public class SpeakerControllerTest {
     }
 
     /**
-     * Test de la creation d'une speaker via l'API REST : <code>/speakers</code>. On teste le cas ou on a une erreur sur
+     * Test de la creation d'une speaker via l'API REST : <code>/speaker</code>. On teste le cas ou on a une erreur sur
      * les donnees
      * @throws Exception
      */
@@ -88,7 +88,7 @@ public class SpeakerControllerTest {
 
         //L'appel de l'URL doit retourner un status 406 si donn�es inavlide
         mockMvc.perform(
-                post("/speakers")
+                post("/speaker")
                         .content(generateSpeakerJson(null, "Martin", "Fowler"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -97,7 +97,7 @@ public class SpeakerControllerTest {
     }
 
     /**
-     * Test de la mise a jour d'une speaker via l'API REST : <code>/speakers</code>. On teste le cas passant
+     * Test de la mise a jour d'une speaker via l'API REST : <code>/speaker</code>. On teste le cas passant
      * @throws Exception
      */
     @Test
@@ -107,7 +107,7 @@ public class SpeakerControllerTest {
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
-                put("/speakers")
+                put("/speaker")
                         .content(generateSpeakerJson("1", "Martin", "Fowler"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -116,7 +116,7 @@ public class SpeakerControllerTest {
     }
 
     /**
-     * Test de la mise a jour d'une speaker via l'API REST : <code>/speakers</code>. On teste le cas ou la donn�e n'existe pas
+     * Test de la mise a jour d'une speaker via l'API REST : <code>/speaker</code>. On teste le cas ou la donn�e n'existe pas
      * @throws Exception
      */
     @Test
@@ -126,7 +126,7 @@ public class SpeakerControllerTest {
 
         //L'appel de l'URL doit retourner un status 404 si donn�es non trouvee
         mockMvc.perform(
-                put("/speakers")
+                put("/speaker")
                         .content(generateSpeakerJson("1", "Martin", "Fowler"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -135,7 +135,7 @@ public class SpeakerControllerTest {
     }
 
     /**
-     * Test de la mise a jour d'une speaker via l'API REST : <code>/speakers</code>. On teste le cas ou on a une erreur sur
+     * Test de la mise a jour d'une speaker via l'API REST : <code>/speaker</code>. On teste le cas ou on a une erreur sur
      * les donnees
      * @throws Exception
      */
@@ -146,7 +146,7 @@ public class SpeakerControllerTest {
 
         //L'appel de l'URL doit retourner un status 406 si donn�es invalide
         mockMvc.perform(
-                put("/speakers")
+                put("/speaker")
                         .content(generateSpeakerJson("1", "Martin", "Fowler"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -155,7 +155,7 @@ public class SpeakerControllerTest {
     }
 
     /**
-     * Test de la suppression d'une speaker via l'API REST : <code>/speakers</code>. On teste le cas passant
+     * Test de la suppression d'une speaker via l'API REST : <code>/speaker</code>. On teste le cas passant
      * @throws Exception
      */
     @Test
@@ -165,7 +165,7 @@ public class SpeakerControllerTest {
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
-                delete("/speakers/{id}", "1")
+                delete("/speaker/{id}", "1")
                         .content(generateSpeakerJson("1", "Martin", "Fowler"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -174,7 +174,7 @@ public class SpeakerControllerTest {
     }
 
     /**
-     * Test de la suppression d'une speaker via l'API REST : <code>/speakers</code>. On teste le cas ou la donn�e n'existe pas
+     * Test de la suppression d'une speaker via l'API REST : <code>/speaker</code>. On teste le cas ou la donn�e n'existe pas
      * @throws Exception
      */
     @Test
@@ -185,7 +185,7 @@ public class SpeakerControllerTest {
 
         //L'appel de l'URL doit retourner un status 404 si donn�es non trouvee
         mockMvc.perform(
-                delete("/speakers/{id}", "1")
+                delete("/speaker/{id}", "1")
                         .content(generateSpeakerJson("1", "Martin", "Fowler"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -194,7 +194,7 @@ public class SpeakerControllerTest {
     }
 
     /**
-     * Test de la recuperation d'une speaker via l'API REST : <code>/speakers/{id}</code>. On teste le cas passant
+     * Test de la recuperation d'une speaker via l'API REST : <code>/speaker/{id}</code>. On teste le cas passant
      *
      * @throws Exception
      */
@@ -207,7 +207,7 @@ public class SpeakerControllerTest {
                 new Speaker().setFirstname("Martin").setLastname("Fowler"));
 
         //L'appel de l'URL doit retourner un status 200
-        mockMvc.perform(get("/speakers/{id}", idCherche))
+        mockMvc.perform(get("/speaker/{id}", idCherche))
                 .andDo(print())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("firstname").value("Martin"))
@@ -215,7 +215,7 @@ public class SpeakerControllerTest {
     }
 
     /**
-     * Test de la recuperation d'une speaker via l'API REST : <code>/speakers/{id}</code>. On teste le cas oe l'enregistrement
+     * Test de la recuperation d'une speaker via l'API REST : <code>/speaker/{id}</code>. On teste le cas oe l'enregistrement
      * n'existe pas
      *
      * @throws Exception
@@ -226,13 +226,13 @@ public class SpeakerControllerTest {
         when(speakerService.getSpeaker(any(Speaker.class))).thenReturn(null);
 
         //L'appel de l'URL doit retourner un status 200
-        mockMvc.perform(get("/speakers/{id}", "1"))
+        mockMvc.perform(get("/speaker/{id}", "1"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
 
     /**
-     * Test de la recuperation de toutes les speakers via l'API REST : <code>/speakers</code>. On teste le cas passant
+     * Test de la recuperation de toutes les speakers via l'API REST : <code>/speaker</code>. On teste le cas passant
      *
      * @throws Exception
      */
@@ -248,7 +248,7 @@ public class SpeakerControllerTest {
                 listExpected);
 
         //L'appel de l'URL doit retourner un status 200
-        mockMvc.perform(get("/speakers"))
+        mockMvc.perform(get("/speaker"))
                 .andDo(print())
                 .andExpect(jsonPath("$[0].firstname").value("Agnes"))
                 .andExpect(jsonPath("$[1].firstname").value("Guillaume"))

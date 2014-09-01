@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
  *  Test du controller {@link com.ninjamind.conference.controller.TalkController}
  * @author ehret_g
  */
-public class TalkCommandsControllerTest {
+public class TalkControllerTest {
     MockMvc mockMvc;
 
     @InjectMocks
@@ -55,7 +55,7 @@ public class TalkCommandsControllerTest {
     }
 
     /**
-     * Test de la creation d'une talk via l'API REST : <code>/talks</code>. On teste le cas passant
+     * Test de la creation d'une talk via l'API REST : <code>/talk</code>. On teste le cas passant
      * @throws Exception
      */
     @Test
@@ -67,7 +67,7 @@ public class TalkCommandsControllerTest {
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
-                post("/talks")
+                post("/talk")
                         .content(generateTalkJson(null, "Le bon testeur il teste..."))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -76,7 +76,7 @@ public class TalkCommandsControllerTest {
     }
 
     /**
-     * Test de la creation d'une talk via l'API REST : <code>/talks</code>. On teste le cas ou on a une erreur sur
+     * Test de la creation d'une talk via l'API REST : <code>/talk</code>. On teste le cas ou on a une erreur sur
      * les donnees
      * @throws Exception
      */
@@ -88,7 +88,7 @@ public class TalkCommandsControllerTest {
 
         //L'appel de l'URL doit retourner un status 406 si donn�es inavlide
         mockMvc.perform(
-                post("/talks")
+                post("/talk")
                         .content(generateTalkJson(null, "Le bon testeur il teste..."))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -97,7 +97,7 @@ public class TalkCommandsControllerTest {
     }
 
     /**
-     * Test de la mise a jour d'une talk via l'API REST : <code>/talks</code>. On teste le cas passant
+     * Test de la mise a jour d'une talk via l'API REST : <code>/talk</code>. On teste le cas passant
      * @throws Exception
      */
     @Test
@@ -109,7 +109,7 @@ public class TalkCommandsControllerTest {
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
-                put("/talks")
+                put("/talk")
                         .content(generateTalkJson("1", "Le bon testeur il teste..."))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -118,7 +118,7 @@ public class TalkCommandsControllerTest {
     }
 
     /**
-     * Test de la mise a jour d'une talk via l'API REST : <code>/talks</code>. On teste le cas ou la donn�e n'existe pas
+     * Test de la mise a jour d'une talk via l'API REST : <code>/talk</code>. On teste le cas ou la donn�e n'existe pas
      * @throws Exception
      */
     @Test
@@ -129,7 +129,7 @@ public class TalkCommandsControllerTest {
 
         //L'appel de l'URL doit retourner un status 404 si donn�es non trouvee
         mockMvc.perform(
-                put("/talks")
+                put("/talk")
                         .content(generateTalkJson("1", "Le bon testeur il teste..."))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -138,7 +138,7 @@ public class TalkCommandsControllerTest {
     }
 
     /**
-     * Test de la mise a jour d'une talk via l'API REST : <code>/talks</code>. On teste le cas ou on a une erreur sur
+     * Test de la mise a jour d'une talk via l'API REST : <code>/talk</code>. On teste le cas ou on a une erreur sur
      * les donnees
      * @throws Exception
      */
@@ -150,7 +150,7 @@ public class TalkCommandsControllerTest {
 
         //L'appel de l'URL doit retourner un status 406 si donn�es invalide
         mockMvc.perform(
-                put("/talks")
+                put("/talk")
                         .content(generateTalkJson("1", "Le bon testeur il teste..."))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -159,7 +159,7 @@ public class TalkCommandsControllerTest {
     }
 
     /**
-     * Test de la suppression d'une talk via l'API REST : <code>/talks</code>. On teste le cas passant
+     * Test de la suppression d'une talk via l'API REST : <code>/talk</code>. On teste le cas passant
      * @throws Exception
      */
     @Test
@@ -171,7 +171,7 @@ public class TalkCommandsControllerTest {
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
-                delete("/talks/{id}", "1")
+                delete("/talk/{id}", "1")
                         .content(generateTalkJson("1", "Le bon testeur il teste..."))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -180,7 +180,7 @@ public class TalkCommandsControllerTest {
     }
 
     /**
-     * Test de la suppression d'une talk via l'API REST : <code>/talks</code>. On teste le cas ou la donn�e n'existe pas
+     * Test de la suppression d'une talk via l'API REST : <code>/talk</code>. On teste le cas ou la donn�e n'existe pas
      * @throws Exception
      */
     @Test
@@ -191,7 +191,7 @@ public class TalkCommandsControllerTest {
 
         //L'appel de l'URL doit retourner un status 404 si donn�es non trouvee
         mockMvc.perform(
-                delete("/talks/{id}", "1")
+                delete("/talk/{id}", "1")
                         .content(generateTalkJson("1", "Le bon testeur il teste..."))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -200,7 +200,7 @@ public class TalkCommandsControllerTest {
     }
 
     /**
-     * Test de la recuperation d'une talk via l'API REST : <code>/talks/{id}</code>. On teste le cas passant
+     * Test de la recuperation d'une talk via l'API REST : <code>/talk/{id}</code>. On teste le cas passant
      * @throws Exception
      */
     @Test
@@ -212,7 +212,7 @@ public class TalkCommandsControllerTest {
                 new Talk().setName("Le bon testeur il teste..."));
 
         //L'appel de l'URL doit retourner un status 200
-        mockMvc.perform(get("/talks/{id}", idCherche))
+        mockMvc.perform(get("/talk/{id}", idCherche))
                 .andDo(print())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("name").value("Le bon testeur il teste..."))
@@ -220,7 +220,7 @@ public class TalkCommandsControllerTest {
     }
 
     /**
-     * Test de la recuperation d'une talk via l'API REST : <code>/talks/{id}</code>. On teste le cas oe l'enregistrement
+     * Test de la recuperation d'une talk via l'API REST : <code>/talk/{id}</code>. On teste le cas oe l'enregistrement
      * n'existe pas
      * @throws Exception
      */
@@ -231,13 +231,13 @@ public class TalkCommandsControllerTest {
                 null);
 
         //L'appel de l'URL doit retourner un status 200
-        mockMvc.perform(get("/talks/{id}", "1"))
+        mockMvc.perform(get("/talk/{id}", "1"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
 
     /**
-     * Test de la recuperation de toutes les talks via l'API REST : <code>/talks</code>. On teste le cas passant
+     * Test de la recuperation de toutes les talks via l'API REST : <code>/talk</code>. On teste le cas passant
      *
      * @throws Exception
      */
@@ -252,7 +252,7 @@ public class TalkCommandsControllerTest {
         when(talkService.getAllTalk()).thenReturn(listExpected);
 
         //L'appel de l'URL doit retourner un status 200
-        mockMvc.perform(get("/talks"))
+        mockMvc.perform(get("/talk"))
                 .andDo(print())
                 .andExpect(jsonPath("$[0].name").value("Le bon testeur il teste..."))
                 .andExpect(jsonPath("$[1].name").value("Le mauvais testeur il teste..."))
