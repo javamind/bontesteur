@@ -20,31 +20,32 @@ public interface ConferenceService {
 
      /**
      * Permet de retourner une conference
-     * @param params
+     * @param conference
      * @return
      */
-     Conference getConference(Conference params);
+     Conference getConference(Conference conference);
 
     /**
      * Creation d'une conference
-     * @param event
+     * @param conference
      * @return
      */
-    CreatedEvent<Conference> createConference(Conference event);
+    Conference createConference(Conference conference);
+
 
     /**
-     * Modification d'une conference
-     * @param event
+     * Creation d'une conference
+     * @param conference
      * @return
      */
-    UpdatedEvent<Conference> updateConference(Conference event);
+    Conference updateConference(Conference conference);
 
     /**
      * Suppression d'une conference
-     * @param event
+     * @param conference
      * @return
      */
-    DeletedEvent<Conference> deleteConference(Conference event);
+    boolean deleteConference(Conference conference);
 
     /**
      * Permet la conference que les personnes trouvent la plus cool. Le calcul se base sur

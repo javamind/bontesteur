@@ -20,29 +20,32 @@ public interface SpeakerService {
 
     /**
      * Permet de retourner un speaker
-     * @param event
+     * @param speaker
      * @return
      */
-    Speaker getSpeaker(Speaker event);
+    Speaker getSpeaker(Speaker speaker);
 
     /**
      * Creation d'un speaker
-     * @param event
+     * @param speaker
      * @return
      */
-    CreatedEvent<Speaker> createSpeaker(Speaker event);
+    Speaker createSpeaker(Speaker speaker);
+
 
     /**
-     * Modification d'un speaker
-     * @param event
+     * Mise a jour d'un speaker
+     * @param speaker
      * @return
      */
-    UpdatedEvent<Speaker> updateSpeaker(Speaker event);
+    Speaker updateSpeaker(Speaker speaker);
 
     /**
      * Suppression d'un speaker
-     * @param event
+     * @param speaker
      * @return
      */
-    DeletedEvent<Speaker> deleteSpeaker(Speaker event);
+    boolean deleteSpeaker(Speaker speaker);
+
+
 }

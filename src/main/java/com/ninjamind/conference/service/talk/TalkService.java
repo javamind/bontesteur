@@ -4,6 +4,8 @@ import com.ninjamind.conference.domain.Talk;
 import com.ninjamind.conference.events.CreatedEvent;
 import com.ninjamind.conference.events.DeletedEvent;
 import com.ninjamind.conference.events.UpdatedEvent;
+import com.ninjamind.conference.repository.TalkRepository;
+
 import java.util.List;
 
 /**
@@ -19,29 +21,36 @@ public interface TalkService {
 
     /**
      * Permet de retourner un Talk
-     * @param event
+     * @param talk
      * @return
      */
-    Talk getTalk(Talk event);
+    Talk getTalk(Talk talk);
+
 
     /**
      * Creation d'un Talk
-     * @param event
-     * @return
+     * @param talk
      */
-    CreatedEvent<Talk> createTalk(Talk event);
+    Talk createTalk(Talk talk);
 
     /**
-     * Modification d'un Talk
-     * @param event
-     * @return
+     * Mise a jour d'un Talk
+     * @param talk
      */
-    UpdatedEvent<Talk> updateTalk(Talk event);
+    Talk updateTalk(Talk talk);
+
 
     /**
      * Suppression d'un Talk
-     * @param event
+     * @param talk
      * @return
      */
-    DeletedEvent deleteTalk(Talk event);
+    boolean deleteTalk(Talk talk);
+
+    /**
+     *
+     * @param talkRepository
+     * @return
+     */
+    TalkServiceImpl setTalkRepository(TalkRepository talkRepository);
 }

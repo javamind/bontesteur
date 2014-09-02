@@ -1,9 +1,6 @@
 package com.ninjamind.conference.service.talk;
 
 import com.ninjamind.conference.domain.Talk;
-import com.ninjamind.conference.events.CreatedEvent;
-import com.ninjamind.conference.events.DeletedEvent;
-import com.ninjamind.conference.events.UpdatedEvent;
 import com.ninjamind.conference.repository.TalkRepository;
 import junitparams.JUnitParamsRunner;
 import org.junit.Before;
@@ -18,7 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 /**
  * Classe de test de {@link com.ninjamind.conference.service.talk.TalkService}
@@ -61,9 +58,9 @@ public class TalkServiceImplTest {
         when(talkRepository.save(any(Talk.class))).thenReturn(talkCreated);
 
         //On appelle notre service de creation
-        CreatedEvent<Talk> createdTalkEvent = service.createTalk(new Talk().setName("Le bon testeur il teste... le mauvais testeur il teste..."));
-        assertThat(((Talk)createdTalkEvent.getValue()).getId()).isEqualTo(1L);
-        assertThat(((Talk)createdTalkEvent.getValue()).getName()).isEqualTo("Le bon testeur il teste... le mauvais testeur il teste...");
+        Talk createdTalkEvent = service.createTalk(new Talk().setName("Le bon testeur il teste... le mauvais testeur il teste..."));
+        assertThat(createdTalkEvent.getId()).isEqualTo(1L);
+        assertThat(createdTalkEvent.getName()).isEqualTo("Le bon testeur il teste... le mauvais testeur il teste...");
     }
 
 
@@ -103,10 +100,10 @@ public class TalkServiceImplTest {
         //On appelle notre service de creation
         Talk param = new Talk().setName("Le bon testeur il teste... le mauvais testeur il teste...");
         param.setId(1L);
-        UpdatedEvent<Talk> updatedTalkEvent = service.updateTalk(param);
+        Talk updatedTalkEvent = service.updateTalk(param);
 
-        assertThat(((Talk)updatedTalkEvent.getValue()).getId()).isEqualTo(1L);
-        assertThat(((Talk)updatedTalkEvent.getValue()).getName()).isEqualTo("Le bon testeur il teste... le mauvais testeur il teste...");
+        assertThat(updatedTalkEvent.getId()).isEqualTo(1L);
+        assertThat(updatedTalkEvent.getName()).isEqualTo("Le bon testeur il teste... le mauvais testeur il teste...");
 
     }
 
@@ -122,10 +119,9 @@ public class TalkServiceImplTest {
         //On appelle notre service de creation
         Talk param = new Talk().setDescription("Le bon testeur il teste... le mauvais testeur il teste...");
         param.setId(1L);
-        UpdatedEvent<Talk> updatedTalkEvent = service.updateTalk(param);
+        Talk updatedTalkEvent = service.updateTalk(param);
 
-        assertThat(updatedTalkEvent.getValue()).isNull();
-        assertThat(updatedTalkEvent.isEntityFound()).isEqualTo(false);
+        assertThat(updatedTalkEvent).isNull();
 
     }
 
@@ -139,9 +135,8 @@ public class TalkServiceImplTest {
         when(talkRepository.findOne(1L)).thenReturn(new Talk().setDescription("Le bon testeur il teste... le mauvais testeur il teste..."));
 
         //On appelle notre service de creation
-        DeletedEvent<Talk> deletedTalkEvent = service.deleteTalk(new Talk(1L));
+        assertThat(service.deleteTalk(new Talk(1L))).isTrue();
 
-        assertThat(deletedTalkEvent.getValue()).isNotNull();
     }
 
     /**
@@ -154,10 +149,7 @@ public class TalkServiceImplTest {
         when(talkRepository.findOne(1L)).thenReturn(null);
 
         //On appelle notre service de creation
-        DeletedEvent<Talk> deletedTalkEvent = service.deleteTalk(new Talk(1L));
-
-        assertThat(deletedTalkEvent.getValue()).isNull();
-        assertThat(deletedTalkEvent.isEntityFound()).isEqualTo(false);
+        assertThat(service.deleteTalk(new Talk(1L))).isFalse();
 
     }
 

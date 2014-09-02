@@ -2,9 +2,6 @@ package com.ninjamind.conference.controller;
 
 import com.google.common.collect.Lists;
 import com.ninjamind.conference.domain.Conference;
-import com.ninjamind.conference.events.CreatedEvent;
-import com.ninjamind.conference.events.DeletedEvent;
-import com.ninjamind.conference.events.UpdatedEvent;
 import com.ninjamind.conference.service.conference.ConferenceService;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,9 +18,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
@@ -63,8 +58,7 @@ public class ConferenceControllerTest {
     @Test
     public void shouldCreateEntity() throws Exception {
         //Le service renvoie une entite
-        when(conferenceService.createConference(any(Conference.class))).thenReturn(
-                new CreatedEvent<Conference>(true, new Conference().setName("Mix-IT").setDateStart(new Date(0)).setDateEnd(new Date(0))));
+        when(conferenceService.createConference(any(Conference.class))).thenReturn(new Conference().setName("Mix-IT").setDateStart(new Date(0)).setDateEnd(new Date(0)));
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
@@ -84,8 +78,7 @@ public class ConferenceControllerTest {
     @Test
     public void shouldNotCreateEntityIfValidationError() throws Exception {
         //Le service renvoie une entite
-        when(conferenceService.createConference(any(Conference.class))).thenReturn(
-                new CreatedEvent<Conference>(false, null));
+        when(conferenceService.createConference(any(Conference.class))).thenThrow(NullPointerException.class);
 
         //L'appel de l'URL doit retourner un status 406 si donn�es inavlide
         mockMvc.perform(
@@ -104,8 +97,7 @@ public class ConferenceControllerTest {
     @Test
     public void shouldUpdateEntity() throws Exception {
         //Le service renvoie une entite
-        when(conferenceService.updateConference(any(Conference.class))).thenReturn(
-                new UpdatedEvent<Conference>(true, new Conference().setName("Mix-IT").setDateStart(new Date(0)).setDateEnd(new Date(0))));
+        when(conferenceService.updateConference(any(Conference.class))).thenReturn(new Conference().setName("Mix-IT").setDateStart(new Date(0)).setDateEnd(new Date(0)));
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
@@ -124,8 +116,7 @@ public class ConferenceControllerTest {
     @Test
     public void shouldNotUpdateEntityIfEntityNotFound() throws Exception {
         //Le service renvoie une entite
-        when(conferenceService.updateConference(any(Conference.class))).thenReturn(
-                new UpdatedEvent<Conference>(false, null));
+        when(conferenceService.updateConference(any(Conference.class))).thenReturn(null);
 
         //L'appel de l'URL doit retourner un status 404 si donn�es non trouvee
         mockMvc.perform(
@@ -145,8 +136,7 @@ public class ConferenceControllerTest {
     @Test
     public void shouldNotUpdateEntityIfValidationError() throws Exception {
         //Le service renvoie une entite
-        when(conferenceService.updateConference(any(Conference.class))).thenReturn(
-                new UpdatedEvent<Conference>(false, true, null));
+        when(conferenceService.updateConference(any(Conference.class))).thenThrow(NullPointerException.class);
 
         //L'appel de l'URL doit retourner un status 406 si donn�es invalide
         mockMvc.perform(
@@ -165,8 +155,7 @@ public class ConferenceControllerTest {
     @Test
     public void shouldDeleteEntity() throws Exception {
         //Le service renvoie une entite
-        when(conferenceService.deleteConference(any(Conference.class))).thenReturn(
-                new DeletedEvent<Conference>(true, new Conference().setName("Mix-IT").setDateStart(new Date(0)).setDateEnd(new Date(0))));
+        when(conferenceService.deleteConference(any(Conference.class))).thenReturn(true);
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
@@ -185,8 +174,7 @@ public class ConferenceControllerTest {
     @Test
     public void shouldNotDeleteEntityIfEntityNotFound() throws Exception {
         //Le service renvoie une entite
-        when(conferenceService.deleteConference(any(Conference.class))).thenReturn(
-                new DeletedEvent<Conference>(false, null));
+        when(conferenceService.deleteConference(any(Conference.class))).thenReturn(false);
 
         //L'appel de l'URL doit retourner un status 404 si donn�es non trouvee
         mockMvc.perform(

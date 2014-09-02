@@ -1,15 +1,14 @@
 package com.ninjamind.conference.controller;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.ninjamind.conference.domain.Conference;
-import com.ninjamind.conference.events.CreatedEvent;
-import com.ninjamind.conference.events.DeletedEvent;
-import com.ninjamind.conference.events.UpdatedEvent;
-import com.ninjamind.conference.events.dto.ConferenceDetail;
+import com.ninjamind.conference.dto.ConferenceDetail;
 import com.ninjamind.conference.service.conference.ConferenceService;
+import com.ninjamind.conference.utils.LoggerFactory;
 import com.ninjamind.conference.utils.Utils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -28,7 +27,10 @@ public class ConferenceController {
      */
     @Autowired
     private ConferenceService conferenceService;
-
+    /**
+     * Logger
+     */
+    private static final Logger LOG = LoggerFactory.make();
     /**
      * Essaye de creer un nouvel enregistrement
      * <code>
@@ -45,12 +47,12 @@ public class ConferenceController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<ConferenceDetail> create(@RequestBody  ConferenceDetail conference) {
-        CreatedEvent<Conference> createdConferenceEvent =  conferenceService.createConference(conference.toConference());
-
-        if(!createdConferenceEvent.isValidEntity()){
+        try {
+            return new ResponseEntity(new ConferenceDetail(conferenceService.createConference(conference.toConference())), HttpStatus.CREATED);
+        } catch (NullPointerException | DataAccessException e) {
+            LOG.error("Error on save conference", e);
             return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
         }
-        return new ResponseEntity(new ConferenceDetail((Conference) createdConferenceEvent.getValue()), HttpStatus.CREATED);
     }
 
     /**
@@ -69,12 +71,10 @@ public class ConferenceController {
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     @ResponseBody
     public ResponseEntity<ConferenceDetail> delete(@PathVariable String id) {
-        DeletedEvent<Conference> deletedConferenceEvent =  conferenceService.deleteConference(new Conference().setId(Utils.stringToLong(id)));
-
-        if(!deletedConferenceEvent.isEntityFound()){
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        if (conferenceService.deleteConference(new Conference().setId(Utils.stringToLong(id)))) {
+            return new ResponseEntity(HttpStatus.OK);
         }
-        return new ResponseEntity(deletedConferenceEvent.getValue(), HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
     /**
@@ -94,15 +94,16 @@ public class ConferenceController {
     @RequestMapping(method = RequestMethod.PUT, consumes="application/json")
     @ResponseBody
     public ResponseEntity<ConferenceDetail> update(@RequestBody  ConferenceDetail conference) {
-        UpdatedEvent<Conference> updatedConferenceEvent =  conferenceService.updateConference(conference.toConference());
-
-        if(!updatedConferenceEvent.isEntityFound()){
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        if(!updatedConferenceEvent.isValidEntity()){
+        try {
+            Conference conf = conferenceService.updateConference(conference.toConference());
+            if (conf == null) {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity(new ConferenceDetail(conf), HttpStatus.OK);
+        } catch (NullPointerException | DataAccessException e) {
+            LOG.error("Error on save conference", e);
             return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
         }
-        return new ResponseEntity(new ConferenceDetail((Conference) updatedConferenceEvent.getValue()), HttpStatus.OK);
     }
 
     /**
@@ -120,12 +121,7 @@ public class ConferenceController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<ConferenceDetail> getAll() {
-        return Lists.transform(conferenceService.getAllConference(), new Function<Conference, ConferenceDetail>() {
-            @Override
-            public ConferenceDetail apply(Conference conference) {
-                return new ConferenceDetail(conference);
-            }
-        });
+        return Lists.transform(conferenceService.getAllConference(), conference -> new ConferenceDetail(conference));
     }
 
     /**

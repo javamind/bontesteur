@@ -2,9 +2,6 @@ package com.ninjamind.conference.service.conference;
 
 import com.ninjamind.conference.domain.Conference;
 import com.ninjamind.conference.domain.Country;
-import com.ninjamind.conference.events.CreatedEvent;
-import com.ninjamind.conference.events.DeletedEvent;
-import com.ninjamind.conference.events.UpdatedEvent;
 import com.ninjamind.conference.repository.ConferenceRepository;
 import com.ninjamind.conference.repository.CountryRepository;
 import com.ninjamind.conference.utils.Utils;
@@ -26,7 +23,7 @@ import java.util.List;
 import static junitparams.JUnitParamsRunner.$;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 /**
  * Classe de test de {@link com.ninjamind.conference.service.conference.ConferenceService}
@@ -83,11 +80,11 @@ public class ConferenceServiceImplTest {
         when(conferenceRepository.save(any(Conference.class))).thenReturn(conferenceCreated);
 
         //On appelle notre service de creation
-        CreatedEvent<Conference> createdConferenceEvent =
+        Conference createdConferenceEvent =
                 service.createConference(new Conference().setName("Mix-IT").setDateStart(new DateTime(2014,4,29,9,0).toDate()).setDateEnd(new DateTime(2014,4,30,19,0).toDate()));
 
-        assertThat(((Conference)createdConferenceEvent.getValue()).getId()).isEqualTo(1L);
-        assertThat(Utils.dateJavaToJson(((Conference) createdConferenceEvent.getValue()).getDateStart())).isEqualTo("2014-04-29 09:00:00");
+        assertThat(createdConferenceEvent.getId()).isEqualTo(1L);
+        assertThat(Utils.dateJavaToJson(createdConferenceEvent.getDateStart())).isEqualTo("2014-04-29 09:00:00");
     }
 
     /**
@@ -106,9 +103,9 @@ public class ConferenceServiceImplTest {
         //On appelle notre service de creation
         Conference param = new Conference().setName("Mix-IT").setDateStart(new DateTime(2014,4,29,9,0).toDate()).setDateEnd(new DateTime(2014,4,30,19,0).toDate());;
         param.setCountry(new Country().setCode("FR").setName("France"));
-        CreatedEvent<Conference> createdConferenceEvent = service.createConference(param);
-        assertThat(((Conference)createdConferenceEvent.getValue()).getId()).isEqualTo(1L);
-        assertThat(Utils.dateJavaToJson(((Conference) createdConferenceEvent.getValue()).getDateStart())).isEqualTo("2014-04-29 09:00:00");
+        Conference createdConferenceEvent = service.createConference(param);
+        assertThat(createdConferenceEvent.getId()).isEqualTo(1L);
+        assertThat(Utils.dateJavaToJson(createdConferenceEvent.getDateStart())).isEqualTo("2014-04-29 09:00:00");
 
     }
 
@@ -151,10 +148,10 @@ public class ConferenceServiceImplTest {
         //On appelle notre service de creation
         Conference param = new Conference().setName("Mix-IT").setDateStart(new DateTime(2014,4,29,9,0).toDate()).setDateEnd(new DateTime(2014,4,30,19,0).toDate());
         param.setId(1L);
-        UpdatedEvent<Conference> updatedConferenceEvent = service.updateConference(param);
+        Conference updatedConferenceEvent = service.updateConference(param);
 
-        assertThat(((Conference)updatedConferenceEvent.getValue()).getId()).isEqualTo(1L);
-        assertThat(Utils.dateJavaToJson(((Conference) updatedConferenceEvent.getValue()).getDateStart())).isEqualTo("2014-04-29 09:00:00");
+        assertThat(updatedConferenceEvent.getId()).isEqualTo(1L);
+        assertThat(Utils.dateJavaToJson(updatedConferenceEvent.getDateStart())).isEqualTo("2014-04-29 09:00:00");
 
     }
 
@@ -173,10 +170,8 @@ public class ConferenceServiceImplTest {
         Conference param = new Conference().setName("Mix-IT").setDateStart(new DateTime(2014,4,29,9,0).toDate()).setDateEnd(new DateTime(2014,4,30,19,0).toDate());
         param.setId(1L);
         param.setCountry(new Country().setCode("FR").setName("France"));
-        UpdatedEvent<Conference> updatedConferenceEvent = service.updateConference(param);
-
-        assertThat(updatedConferenceEvent.getValue()).isNull();
-        assertThat(updatedConferenceEvent.isEntityFound()).isEqualTo(false);
+        Conference updatedConferenceEvent = service.updateConference(param);
+        assertThat(updatedConferenceEvent).isNull();
 
     }
 
@@ -190,9 +185,7 @@ public class ConferenceServiceImplTest {
         when(conferenceRepository.findOne(1L)).thenReturn(new Conference().setName("Mix-IT").setDateStart(new DateTime(2014,4,29,9,0).toDate()).setDateEnd(new DateTime(2014,4,30,19,0).toDate()));
 
         //On appelle notre service de creation
-        DeletedEvent<Conference> deletedConferenceEvent = service.deleteConference(new Conference().setId(1L));
-
-        assertThat(deletedConferenceEvent.getValue()).isNotNull();
+        assertThat(service.deleteConference(new Conference().setId(1L))).isTrue();
 
     }
 
@@ -205,12 +198,8 @@ public class ConferenceServiceImplTest {
         //La recherche de l'entite passee renvoie pas de resultat
         when(conferenceRepository.findOne(1L)).thenReturn(null);
 
-        //On appelle notre service de creation
-        DeletedEvent<Conference> deletedConferenceEvent = service.deleteConference(new Conference().setId(1L));
-
-        assertThat(deletedConferenceEvent.getValue()).isNull();
-        assertThat(deletedConferenceEvent.isEntityFound()).isEqualTo(false);
-
+        //On appelle notre service de suppression
+        assertThat(service.deleteConference(new Conference().setId(1L))).isFalse();
     }
 
 

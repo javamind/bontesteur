@@ -3,13 +3,10 @@ package com.ninjamind.conference.service.talk;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.ninjamind.conference.domain.Talk;
-import com.ninjamind.conference.events.CreatedEvent;
-import com.ninjamind.conference.events.DeletedEvent;
-import com.ninjamind.conference.events.UpdatedEvent;
-import com.ninjamind.conference.events.dto.TalkDetail;
 import com.ninjamind.conference.repository.TalkRepository;
 import com.ninjamind.conference.utils.LoggerFactory;
 import org.apache.log4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -40,38 +37,34 @@ public class TalkServiceImpl implements TalkService {
 
     /**
      * Recuperation d'un talk vi a son ID
-     * @param event
+     * @param talk
      * @return
      */
     @Override
-    public Talk getTalk(Talk event) {
-        Preconditions.checkNotNull(event);
-        Preconditions.checkNotNull(event.getId(), "id is required for search talk");
+    public Talk getTalk(Talk talk) {
+        Preconditions.checkNotNull(talk);
+        Preconditions.checkNotNull(talk.getId(), "id is required for search talk");
 
         //Recherche de l'element par l'id
-        return talkRepository.findOne(event.getId());
+        return talkRepository.findOne(talk.getId());
     }
 
     /**
      * Creation d'une nouvelle talk
-     * @param event
+     * @param talk
      * @return
      */
     @Override
-    public CreatedEvent<Talk> createTalk(Talk event) {
-        Preconditions.checkNotNull(event);
-        Preconditions.checkNotNull(event.getName(), "talk is required to create it");
+    public Talk createTalk(Talk talk) {
+        Preconditions.checkNotNull(talk);
+        Preconditions.checkNotNull(talk.getName(), "talk is required to create it");
 
-        CreatedEvent<Talk> eventReturned = new CreatedEvent(transformAndSaveTalkDetailToTalk(event, true));
-
-        LOG.debug(String.format("Creation du talk ayant id=[%d] name=[%s] UUID:%s",
-                ((Talk)eventReturned.getValue()).getId(), event.getName(),
-                eventReturned.getKey().toString()));
-
-        return eventReturned;
+        Talk talkCreated = transformAndSaveTalkDetailToTalk(talk, true);
+        LOG.debug(String.format("Creation du talk ayant id=[%d] name=[%s]",talkCreated.getId(), talkCreated.getName()));
+        return talkCreated;
     }
 
-    /**
+     /**
      * Permet de convertir la donnée reçue
      * @param talk
      * @return
@@ -83,12 +76,9 @@ public class TalkServiceImpl implements TalkService {
             if(talkToPersist==null){
                 return null;
             }
-            return talkToPersist
-                    .setLevel(talk.getLevel())
-                    .setNbpeoplemax(talk.getNbpeoplemax())
-                    .setPlace(talk.getPlace())
-                    .setDescription(talk.getDescription())
-                    .setName(talk.getName());
+            //On copie les objets de la couche presentation dans l'objet attache a la session Hibernate
+            BeanUtils.copyProperties(talk, talkToPersist, "version");
+            return talkToPersist;
 
         }
         else{
@@ -98,45 +88,37 @@ public class TalkServiceImpl implements TalkService {
     }
 
     @Override
-    public UpdatedEvent<Talk> updateTalk(Talk event) {
-        Preconditions.checkNotNull(event);
-        Preconditions.checkNotNull(event.getId(), "talk is required to update it");
+    public Talk updateTalk(Talk talk) {
+        Preconditions.checkNotNull(talk);
+        Preconditions.checkNotNull(talk.getId(), "talk is required to update it");
 
-        Talk talkUpdated = transformAndSaveTalkDetailToTalk(event, false);
-        UpdatedEvent<Talk> eventReturned = new UpdatedEvent(talkUpdated!=null, talkUpdated);
-
-        LOG.debug(String.format("Modification du talk ayant id=[%d] name=[%s] UUID:%s",
-                talkUpdated !=null ? talkUpdated.getId() : null,
-                talkUpdated !=null ? talkUpdated.getName() : null,
-                eventReturned.getKey().toString()));
-
-        return eventReturned;
+        Talk talkUpdated = transformAndSaveTalkDetailToTalk(talk, false);
+        LOG.debug(String.format("Modification du talk ayant id=[%d] name=[%s]", talk.getId(), talk.getName()));
+        return talkUpdated;
     }
 
     /**
      * Suppression d'une talk
-     * @param event
+     * @param talk
      * @return
      */
     @Override
-    public DeletedEvent<Talk> deleteTalk(Talk event) {
-        Preconditions.checkNotNull(event);
-        Preconditions.checkNotNull(event.getId(), "talk is required to delete talk");
+    public boolean deleteTalk(Talk talk) {
+        Preconditions.checkNotNull(talk);
+        Preconditions.checkNotNull(talk.getId(), "talk is required to delete talk");
 
         //Recherche de l'element par l'id
-        Talk talk = talkRepository.findOne(event.getId());
-        DeletedEvent<Talk> eventReturned = null;
+        Talk talkToDelete = talkRepository.findOne(talk.getId());
 
-        if(talk!=null){
-            talkRepository.delete(talk);
-            eventReturned = new DeletedEvent(true, new TalkDetail(talk));
-            LOG.debug(String.format("Suppression du talk ayant id=[%s] UUID:%s", event.getId(), eventReturned.getKey().toString()));
+        if(talkToDelete!=null){
+            talkRepository.delete(talkToDelete);
+            LOG.debug(String.format("Suppression du talk ayant id=[%s]", talk.getId()));
+            return true;
         }
         else{
-            eventReturned = new DeletedEvent(false, null);
-            LOG.debug(String.format("Le talk ayant id=[%s] n'existe pas UUID:%s", event.getId(), eventReturned.getKey().toString()));
+            LOG.debug(String.format("Le talk ayant id=[%s] n'existe pas", talk.getId()));
         }
-        return eventReturned;
+        return false;
     }
 
     /**

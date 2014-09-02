@@ -4,13 +4,10 @@ import com.ninjamind.conference.domain.Talk;
 import com.ninjamind.conference.events.CreatedEvent;
 import com.ninjamind.conference.repository.TalkRepository;
 import com.ninjamind.conference.service.talk.TalkServiceImpl;
-import junitparams.JUnitParamsRunner;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,11 +38,11 @@ public class TalkServiceImplProblemMockCibleTest {
         when(talkRepository.save(any(Talk.class))).thenReturn(talkCreated);
 
         //On appelle notre service de creation
-        CreatedEvent<Talk> createdTalkEvent = service.createTalk(new Talk().setName(CONF_NAME));
+        Talk createdTalkEvent = service.createTalk(new Talk().setName(CONF_NAME));
 
         //On ne verifie pas le contenu de l'objet car on sait ce que l'on recoit vu qu'on le
-        //d�fini juste avant
-        assertThat(createdTalkEvent.getValue()).isNotNull();
+        //defini juste avant
+        assertThat(createdTalkEvent).isNotNull();
     }
 
 

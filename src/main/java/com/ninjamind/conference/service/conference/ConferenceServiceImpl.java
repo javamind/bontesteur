@@ -2,14 +2,11 @@ package com.ninjamind.conference.service.conference;
 
 import com.google.common.base.Preconditions;
 import com.ninjamind.conference.domain.Conference;
-import com.ninjamind.conference.events.CreatedEvent;
-import com.ninjamind.conference.events.DeletedEvent;
-import com.ninjamind.conference.events.UpdatedEvent;
-import com.ninjamind.conference.events.dto.ConferenceDetail;
 import com.ninjamind.conference.repository.ConferenceRepository;
 import com.ninjamind.conference.repository.CountryRepository;
 import com.ninjamind.conference.utils.LoggerFactory;
 import org.apache.log4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -41,7 +38,7 @@ public class ConferenceServiceImpl implements ConferenceService {
      */
     @Override
     public List<Conference> getAllConference() {
-        //Pour le moment nous n'avons pas de critère de filtre dans ReadAllConferenceRequestEvent
+        //Pour le moment nous n'avons pas de critère de filtre dans ReadAllConferenceRequestconference
         return conferenceRepository.findAll(sortByNameAsc());
     }
 
@@ -49,37 +46,67 @@ public class ConferenceServiceImpl implements ConferenceService {
     /**
      * Recuperation d'une conference vi a son ID
      *
-     * @param event
+     * @param conference
      * @return
      */
     @Override
-    public Conference getConference(Conference event) {
-        Preconditions.checkNotNull(event);
-        Preconditions.checkNotNull(event.getId(), "id is required for search conference");
+    public Conference getConference(Conference conference) {
+        Preconditions.checkNotNull(conference);
+        Preconditions.checkNotNull(conference.getId(), "id is required for search conference");
 
         //Recherche de l'element par l'id
-        return conferenceRepository.findOne(event.getId());
+        return conferenceRepository.findOne(conference.getId());
     }
 
     /**
      * Creation d'une nouvelle conference
      *
-     * @param event
+     * @param conference
      * @return
      */
     @Override
-    public CreatedEvent<Conference> createConference(Conference event) {
-        Preconditions.checkNotNull(event);
-        Preconditions.checkNotNull(event.getName(), "conference is required to create it");
+    public Conference createConference(Conference conference) {
+        Preconditions.checkNotNull(conference);
+        Preconditions.checkNotNull(conference.getName(), "conference is required to create it");
 
-        CreatedEvent<Conference> eventReturned = new CreatedEvent(
-                transformAndSaveConferenceDetailToConference(event, true));
+        Conference conferenceCreated = transformAndSaveConferenceDetailToConference(conference, true);
+        LOG.debug(String.format("Creation de la conference ayant id=[%d] name=[%s]", conferenceCreated.getId(), conference.getName()));
+        return conferenceCreated;
+    }
 
-        LOG.debug(String.format("Creation de la conference ayant id=[%d] name=[%s] UUID:%s",
-                ((Conference) eventReturned.getValue()).getId(), event.getName(),
-                eventReturned.getKey().toString()));
+    @Override
+    public Conference updateConference(Conference conference) {
+        Preconditions.checkNotNull(conference);
+        Preconditions.checkNotNull(conference.getName(), "conference is required to update it");
 
-        return eventReturned;
+        Conference conferenceUpdated = transformAndSaveConferenceDetailToConference(conference, false);
+        LOG.debug(String.format("Modification de la conference ayant id=[%d] name=[%s]", conference.getId(), conference.getName()));
+        return conferenceUpdated;
+    }
+
+    /**
+     * Suppression d'une conference
+     *
+     * @param conference
+     * @return
+     */
+    @Override
+    public boolean deleteConference(Conference conference) {
+        Preconditions.checkNotNull(conference);
+        Preconditions.checkNotNull(conference.getId(), "conference is required to delete conference");
+
+        //Recherche de l'element par l'id
+        Conference conf = conferenceRepository.findOne(conference.getId());
+
+        if (conf != null) {
+            conferenceRepository.delete(conf);
+            LOG.debug(String.format("Suppression de la conference ayant id=[%s]", conference.getId()));
+            return true;
+        }
+        else {
+            LOG.debug(String.format("La conference ayant id=[%s] n'existe pas", conference.getId()));
+        }
+        return false;
     }
 
     /**
@@ -101,20 +128,8 @@ public class ConferenceServiceImpl implements ConferenceService {
             if (conferenceToPersist == null) {
                 return null;
             }
-            return conferenceToPersist
-                    .setCountry(conference.getCountry())
-                    .setPostalCode(conference.getPostalCode())
-                    .setCity(conference.getCity())
-                    .setDateEnd(conference.getDateEnd())
-                    .setDateStart(conference.getDateStart())
-                    .setName(conference.getName())
-                    .setStreetAdress(conference.getStreetAdress())
-                    .setImage(conference.getImage())
-                    .setNbConferenceProposals(conference.getNbConferenceProposals())
-                    .setNbConferenceSlots(conference.getNbConferenceSlots())
-                    .setNbAttendees(conference.getNbAttendees())
-                    .setNbHoursToSellTicket(conference.getNbHoursToSellTicket())
-                    .setNbTwitterFollowers(conference.getNbTwitterFollowers());
+            BeanUtils.copyProperties(conference, conferenceToPersist, "version");
+            return conferenceToPersist;
 
         }
         else {
@@ -123,48 +138,7 @@ public class ConferenceServiceImpl implements ConferenceService {
         }
     }
 
-    @Override
-    public UpdatedEvent<Conference> updateConference(Conference event) {
-        Preconditions.checkNotNull(event);
-        Preconditions.checkNotNull(event.getName(), "conference is required to update it");
 
-        Conference conferenceUpdated = transformAndSaveConferenceDetailToConference(event, false);
-        UpdatedEvent<Conference> eventReturned = new UpdatedEvent(conferenceUpdated != null, conferenceUpdated);
-
-        LOG.debug(String.format("Modification de la conference ayant id=[%d] name=[%s] UUID:%s",
-                eventReturned.getValue() != null ? ((Conference) eventReturned.getValue()).getId() : null,
-                event.getName(),
-                eventReturned.getKey().toString()));
-
-        return eventReturned;
-    }
-
-    /**
-     * Suppression d'une conference
-     *
-     * @param event
-     * @return
-     */
-    @Override
-    public DeletedEvent<Conference> deleteConference(Conference event) {
-        Preconditions.checkNotNull(event);
-        Preconditions.checkNotNull(event.getId(), "conference is required to delete conference");
-
-        //Recherche de l'element par l'id
-        Conference conference = conferenceRepository.findOne(event.getId());
-        DeletedEvent<Conference> eventReturned = null;
-
-        if (conference != null) {
-            conferenceRepository.delete(conference);
-            eventReturned = new DeletedEvent(true, new ConferenceDetail(conference));
-            LOG.debug(String.format("Suppression de la conference ayant id=[%s] UUID:%s", event.getId(), eventReturned.getKey().toString()));
-        }
-        else {
-            eventReturned = new DeletedEvent(false, null);
-            LOG.debug(String.format("La conference ayant id=[%s] n'existe pas UUID:%s", event.getId(), eventReturned.getKey().toString()));
-        }
-        return eventReturned;
-    }
 
 
     /**

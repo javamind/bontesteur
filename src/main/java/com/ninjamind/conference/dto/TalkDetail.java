@@ -1,4 +1,4 @@
-package com.ninjamind.conference.events.dto;
+package com.ninjamind.conference.dto;
 
 import com.ninjamind.conference.domain.Level;
 import com.ninjamind.conference.domain.Status;

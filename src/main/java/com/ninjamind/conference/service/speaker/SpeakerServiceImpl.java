@@ -2,14 +2,11 @@ package com.ninjamind.conference.service.speaker;
 
 import com.google.common.base.Preconditions;
 import com.ninjamind.conference.domain.Speaker;
-import com.ninjamind.conference.events.CreatedEvent;
-import com.ninjamind.conference.events.DeletedEvent;
-import com.ninjamind.conference.events.UpdatedEvent;
-import com.ninjamind.conference.events.dto.SpeakerDetail;
 import com.ninjamind.conference.repository.CountryRepository;
 import com.ninjamind.conference.repository.SpeakerRepository;
 import com.ninjamind.conference.utils.LoggerFactory;
 import org.apache.log4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -43,34 +40,30 @@ public class SpeakerServiceImpl implements SpeakerService {
 
     /**
      * Recuperation d'un speaker vi a son ID
-     * @param event
+     * @param speaker
      * @return
      */
     @Override
-    public Speaker getSpeaker(Speaker event) {
-        Preconditions.checkNotNull(event);
-        Preconditions.checkNotNull(event.getId(), "id is required for search speaker");
-        return speakerRepository.findOne(event.getId());
+    public Speaker getSpeaker(Speaker speaker) {
+        Preconditions.checkNotNull(speaker);
+        Preconditions.checkNotNull(speaker.getId(), "id is required for search speaker");
+        return speakerRepository.findOne(speaker.getId());
 
     }
 
     /**
      * Creation d'une nouvelle speaker
-     * @param event
+     * @param speaker
      * @return
      */
     @Override
-    public CreatedEvent<Speaker> createSpeaker(Speaker event) {
-        Preconditions.checkNotNull(event);
-        Preconditions.checkNotNull(event.getLastname(), "speaker is required to create it");
+    public Speaker createSpeaker(Speaker speaker) {
+        Preconditions.checkNotNull(speaker);
+        Preconditions.checkNotNull(speaker.getLastname(), "speaker is required to create it");
 
-        CreatedEvent<Speaker> eventReturned = new CreatedEvent(transformAndSaveSpeakerDetailToSpeaker(event, true));
-
-        LOG.debug(String.format("Creation du speaker ayant id=[%d] name=[%s] UUID:%s",
-                ((Speaker) eventReturned.getValue()).getId(), event.getLastname(),
-                eventReturned.getKey().toString()));
-
-        return eventReturned;
+        Speaker speakerCreated = transformAndSaveSpeakerDetailToSpeaker(speaker, true);
+        LOG.debug(String.format("Creation du speaker ayant id=[%d] name=[%s]", speakerCreated.getId(), speaker.getLastname()));
+        return speakerCreated;
     }
 
     /**
@@ -91,15 +84,8 @@ public class SpeakerServiceImpl implements SpeakerService {
             if(speakerToPersist==null){
                 return null;
             }
-            return speakerToPersist
-                    .setCountry(speaker.getCountry())
-                    .setPostalCode(speaker.getPostalCode())
-                    .setCity(speaker.getCity())
-                    .setFirstname(speaker.getFirstname())
-                    .setImage(speaker.getImage())
-                    .setLastname(speaker.getLastname())
-                    .setCompany(speaker.getCompany())
-                    .setStreetAdress(speaker.getStreetAdress());
+            BeanUtils.copyProperties(speaker, speakerToPersist, "version");
+            return speakerToPersist;
         }
         else{
             //On enregistre
@@ -108,45 +94,37 @@ public class SpeakerServiceImpl implements SpeakerService {
     }
 
     @Override
-    public UpdatedEvent<Speaker> updateSpeaker(Speaker event) {
-        Preconditions.checkNotNull(event);
-        Preconditions.checkNotNull(event.getId(), "speaker is required to update it");
+    public Speaker updateSpeaker(Speaker speaker) {
+        Preconditions.checkNotNull(speaker);
+        Preconditions.checkNotNull(speaker.getId(), "speaker is required to update it");
 
-        Speaker speakerUpdated = transformAndSaveSpeakerDetailToSpeaker(event, false);
-        UpdatedEvent<Speaker> eventReturned = new UpdatedEvent(speakerUpdated!=null , speakerUpdated);
-
-        LOG.debug(String.format("Modification du speaker ayant id=[%d] name=[%s] UUID:%s",
-                speakerUpdated !=null ? speakerUpdated.getId() : null,
-                speakerUpdated !=null ? speakerUpdated.getLastname() : null,
-                eventReturned.getKey().toString()));
-
-        return eventReturned;
+        Speaker speakerUpdated = transformAndSaveSpeakerDetailToSpeaker(speaker, false);
+        LOG.debug(String.format("Modification du speaker ayant id=[%d] name=[%s]", speaker.getId(), speaker.getLastname()));
+        return speakerUpdated;
     }
 
     /**
      * Suppression d'une speaker
-     * @param event
+     * @param speaker
      * @return
      */
     @Override
-    public DeletedEvent<Speaker> deleteSpeaker(Speaker event) {
-        Preconditions.checkNotNull(event);
-        Preconditions.checkNotNull(event.getId(), "speaker is required to delete speaker");
+    public boolean deleteSpeaker(Speaker speaker) {
+        Preconditions.checkNotNull(speaker);
+        Preconditions.checkNotNull(speaker.getId(), "speaker is required to delete speaker");
 
         //Recherche de l'element par l'id
-        Speaker speaker = speakerRepository.findOne(event.getId());
-        DeletedEvent<Speaker> eventReturned = null;
+        Speaker speakerToDelete = speakerRepository.findOne(speaker.getId());
 
-        if(speaker!=null){
-            speakerRepository.delete(speaker);
-            eventReturned = new DeletedEvent(true, new SpeakerDetail(speaker));
-            LOG.debug(String.format("Suppression de la speaker ayant id=[%s] UUID:%s", event.getId(), eventReturned.getKey().toString()));
+        if(speakerToDelete!=null){
+            speakerRepository.delete(speakerToDelete);
+            LOG.debug(String.format("Suppression de la speaker ayant id=[%s]", speaker.getId()));
+            return true;
         }
         else{
-            eventReturned = new DeletedEvent(false, null);
-            LOG.debug(String.format("La speaker ayant id=[%s] n'existe pas UUID:%s", event.getId(), eventReturned.getKey().toString()));
+            LOG.debug(String.format("La speaker ayant id=[%s] n'existe pas", speaker.getId()));
         }
-        return eventReturned;
+        return false;
     }
 
     /**

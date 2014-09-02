@@ -2,9 +2,6 @@ package com.ninjamind.conference.controller;
 
 import com.google.common.collect.Lists;
 import com.ninjamind.conference.domain.Speaker;
-import com.ninjamind.conference.events.CreatedEvent;
-import com.ninjamind.conference.events.DeletedEvent;
-import com.ninjamind.conference.events.UpdatedEvent;
 import com.ninjamind.conference.service.speaker.SpeakerService;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,9 +17,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
@@ -64,7 +59,7 @@ public class SpeakerControllerTest {
     @Test
     public void shouldCreateEntity() throws Exception {
         //Le service renvoie une entite
-        when(speakerService.createSpeaker(any(Speaker.class))).thenReturn(new CreatedEvent<>(true, new Speaker().setFirstname("Martin").setLastname("Fowler")));
+        when(speakerService.createSpeaker(any(Speaker.class))).thenReturn(new Speaker().setFirstname("Martin").setLastname("Fowler"));
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
@@ -84,7 +79,7 @@ public class SpeakerControllerTest {
     @Test
     public void shouldNotCreateEntityIfValidationError() throws Exception {
         //Le service renvoie une entite
-        when(speakerService.createSpeaker(any(Speaker.class))).thenReturn(new CreatedEvent(false, null));
+        when(speakerService.createSpeaker(any(Speaker.class))).thenThrow(NullPointerException.class);
 
         //L'appel de l'URL doit retourner un status 406 si donn�es inavlide
         mockMvc.perform(
@@ -103,7 +98,7 @@ public class SpeakerControllerTest {
     @Test
     public void shouldUpdateEntity() throws Exception {
         //Le service renvoie une entite
-        when(speakerService.updateSpeaker(any(Speaker.class))).thenReturn(new UpdatedEvent<>(true, new Speaker().setFirstname("Martin").setLastname("Fowler")));
+        when(speakerService.updateSpeaker(any(Speaker.class))).thenReturn(new Speaker().setFirstname("Martin").setLastname("Fowler"));
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
@@ -122,7 +117,7 @@ public class SpeakerControllerTest {
     @Test
     public void shouldNotUpdateEntityIfEntityNotFound() throws Exception {
         //Le service renvoie une entite
-        when(speakerService.updateSpeaker(any(Speaker.class))).thenReturn(new UpdatedEvent(false, null));
+        when(speakerService.updateSpeaker(any(Speaker.class))).thenReturn(null);
 
         //L'appel de l'URL doit retourner un status 404 si donn�es non trouvee
         mockMvc.perform(
@@ -142,7 +137,7 @@ public class SpeakerControllerTest {
     @Test
     public void shouldNotUpdateEntityIfValidationError() throws Exception {
         //Le service renvoie une entite
-        when(speakerService.updateSpeaker(any(Speaker.class))).thenReturn(new UpdatedEvent(false, true, null));
+        when(speakerService.updateSpeaker(any(Speaker.class))).thenThrow(NullPointerException.class);
 
         //L'appel de l'URL doit retourner un status 406 si donn�es invalide
         mockMvc.perform(
@@ -161,7 +156,7 @@ public class SpeakerControllerTest {
     @Test
     public void shouldDeleteEntity() throws Exception {
         //Le service renvoie une entite
-        when(speakerService.deleteSpeaker(any(Speaker.class))).thenReturn(new DeletedEvent<>(true, new Speaker().setFirstname("Martin").setLastname("Fowler")));
+        when(speakerService.deleteSpeaker(any(Speaker.class))).thenReturn(true);
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
@@ -180,8 +175,7 @@ public class SpeakerControllerTest {
     @Test
     public void shouldNotDeleteEntityIfEntityNotFound() throws Exception {
         //Le service renvoie une entite
-        when(speakerService.deleteSpeaker(any(Speaker.class))).thenReturn(
-                new DeletedEvent<Speaker>(false, null));
+        when(speakerService.deleteSpeaker(any(Speaker.class))).thenReturn(false);
 
         //L'appel de l'URL doit retourner un status 404 si donn�es non trouvee
         mockMvc.perform(

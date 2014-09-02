@@ -2,9 +2,6 @@ package com.ninjamind.conference.controller;
 
 import com.google.common.collect.Lists;
 import com.ninjamind.conference.domain.Talk;
-import com.ninjamind.conference.events.CreatedEvent;
-import com.ninjamind.conference.events.DeletedEvent;
-import com.ninjamind.conference.events.UpdatedEvent;
 import com.ninjamind.conference.service.talk.TalkService;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,9 +17,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
@@ -61,9 +56,7 @@ public class TalkControllerTest {
     @Test
     public void shouldCreateEntity() throws Exception {
         //Le service renvoie une entite
-        when(talkService.createTalk(any(Talk.class))).thenReturn(
-                new CreatedEvent<>(true, new Talk().setDescription("Le bon testeur il teste..."))
-        );
+        when(talkService.createTalk(any(Talk.class))).thenReturn(new Talk().setDescription("Le bon testeur il teste..."));
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
@@ -83,8 +76,7 @@ public class TalkControllerTest {
     @Test
     public void shouldNotCreateEntityIfValidationError() throws Exception {
         //Le service renvoie une entite
-        when(talkService.createTalk(any(Talk.class))).thenReturn(
-                new CreatedEvent<>(false, null));
+        when(talkService.createTalk(any(Talk.class))).thenThrow(NullPointerException.class);
 
         //L'appel de l'URL doit retourner un status 406 si donn�es inavlide
         mockMvc.perform(
@@ -103,9 +95,7 @@ public class TalkControllerTest {
     @Test
     public void shouldUpdateEntity() throws Exception {
         //Le service renvoie une entite
-        when(talkService.updateTalk(any(Talk.class))).thenReturn(
-                new UpdatedEvent<>(true, new Talk().setDescription("Le bon testeur il teste..."))
-        );
+        when(talkService.updateTalk(any(Talk.class))).thenReturn(new Talk().setDescription("Le bon testeur il teste..."));
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
@@ -124,8 +114,7 @@ public class TalkControllerTest {
     @Test
     public void shouldNotUpdateEntityIfEntityNotFound() throws Exception {
         //Le service renvoie une entite
-        when(talkService.updateTalk(any(Talk.class))).thenReturn(
-                new UpdatedEvent<>(false, null));
+        when(talkService.updateTalk(any(Talk.class))).thenReturn(null);
 
         //L'appel de l'URL doit retourner un status 404 si donn�es non trouvee
         mockMvc.perform(
@@ -145,8 +134,7 @@ public class TalkControllerTest {
     @Test
     public void shouldNotUpdateEntityIfValidationError() throws Exception {
         //Le service renvoie une entite
-        when(talkService.updateTalk(any(Talk.class))).thenReturn(
-                new UpdatedEvent<>(false, true, null));
+        when(talkService.updateTalk(any(Talk.class))).thenThrow(NullPointerException.class);
 
         //L'appel de l'URL doit retourner un status 406 si donn�es invalide
         mockMvc.perform(
@@ -165,9 +153,7 @@ public class TalkControllerTest {
     @Test
     public void shouldDeleteEntity() throws Exception {
         //Le service renvoie une entite
-        when(talkService.deleteTalk(any(Talk.class))).thenReturn(
-                new DeletedEvent(true, new Talk(1L))
-        );
+        when(talkService.deleteTalk(any(Talk.class))).thenReturn(true);
 
         //L'appel de l'URL doit retourner un status 201
         mockMvc.perform(
@@ -186,8 +172,7 @@ public class TalkControllerTest {
     @Test
     public void shouldNotDeleteEntityIfEntityNotFound() throws Exception {
         //Le service renvoie une entite
-        when(talkService.deleteTalk(any(Talk.class))).thenReturn(
-                new DeletedEvent(false, null));
+        when(talkService.deleteTalk(any(Talk.class))).thenReturn(false);
 
         //L'appel de l'URL doit retourner un status 404 si donn�es non trouvee
         mockMvc.perform(

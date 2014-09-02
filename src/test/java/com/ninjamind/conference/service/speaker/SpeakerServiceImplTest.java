@@ -2,9 +2,6 @@ package com.ninjamind.conference.service.speaker;
 
 import com.ninjamind.conference.domain.Country;
 import com.ninjamind.conference.domain.Speaker;
-import com.ninjamind.conference.events.CreatedEvent;
-import com.ninjamind.conference.events.DeletedEvent;
-import com.ninjamind.conference.events.UpdatedEvent;
 import com.ninjamind.conference.repository.CountryRepository;
 import com.ninjamind.conference.repository.SpeakerRepository;
 import junitparams.JUnitParamsRunner;
@@ -20,7 +17,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 /**
  * Classe de test de {@link com.ninjamind.conference.service.speaker.SpeakerService}
@@ -76,11 +73,10 @@ public class SpeakerServiceImplTest {
         when(speakerRepository.save(any(Speaker.class))).thenReturn(speakerCreated);
 
         //On appelle notre service de creation
-        CreatedEvent<Speaker> createdSpeakerEvent =
-                service.createSpeaker(new Speaker().setFirstname("Martin").setLastname("Fowler"));
+        Speaker createdSpeakerEvent = service.createSpeaker(new Speaker().setFirstname("Martin").setLastname("Fowler"));
 
-        assertThat(((Speaker)createdSpeakerEvent.getValue()).getId()).isEqualTo(1L);
-        assertThat(((Speaker)createdSpeakerEvent.getValue()).getLastname()).isEqualTo("Fowler");
+        assertThat(createdSpeakerEvent.getId()).isEqualTo(1L);
+        assertThat(createdSpeakerEvent.getLastname()).isEqualTo("Fowler");
     }
 
     /**
@@ -99,9 +95,9 @@ public class SpeakerServiceImplTest {
         //On appelle notre service de creation
         Speaker param = new Speaker().setFirstname("Martin").setLastname("Fowler");
         param.setCountry(new Country().setCode("FR").setName("France"));
-        CreatedEvent<Speaker> createdSpeakerEvent = service.createSpeaker(param);
-        assertThat(((Speaker)createdSpeakerEvent.getValue()).getId()).isEqualTo(1L);
-        assertThat(((Speaker)createdSpeakerEvent.getValue()).getFirstname()).isEqualTo("Martin");
+        Speaker createdSpeakerEvent = service.createSpeaker(param);
+        assertThat(createdSpeakerEvent.getId()).isEqualTo(1L);
+        assertThat(createdSpeakerEvent.getFirstname()).isEqualTo("Martin");
 
     }
 
@@ -144,10 +140,10 @@ public class SpeakerServiceImplTest {
         //On appelle notre service de creation
         Speaker param = new Speaker().setFirstname("Martin").setLastname("Fowler");
         param.setId(1L);
-        UpdatedEvent<Speaker> updatedSpeakerEvent = service.updateSpeaker(param);
+        Speaker updatedSpeakerEvent = service.updateSpeaker(param);
 
-        assertThat(((Speaker)updatedSpeakerEvent.getValue()).getId()).isEqualTo(1L);
-        assertThat(((Speaker)updatedSpeakerEvent.getValue()).getFirstname()).isEqualTo("Martin");
+        assertThat(updatedSpeakerEvent.getId()).isEqualTo(1L);
+        assertThat(updatedSpeakerEvent.getFirstname()).isEqualTo("Martin");
 
     }
 
@@ -166,10 +162,9 @@ public class SpeakerServiceImplTest {
         Speaker param = new Speaker().setFirstname("Martin").setLastname("Fowler");
         param.setId(1L);
         param.setCountry(new Country().setCode("FR").setName("France"));
-        UpdatedEvent<Speaker> updatedSpeakerEvent = service.updateSpeaker(param);
+        Speaker updatedSpeakerEvent = service.updateSpeaker(param);
 
-        assertThat(updatedSpeakerEvent.getValue()).isNull();
-        assertThat(updatedSpeakerEvent.isEntityFound()).isEqualTo(false);
+        assertThat(updatedSpeakerEvent).isNull();
 
     }
 
@@ -183,9 +178,7 @@ public class SpeakerServiceImplTest {
         when(speakerRepository.findOne(1L)).thenReturn(new Speaker().setFirstname("Martin").setLastname("Fowler"));
 
         //On appelle notre service de creation
-        DeletedEvent<Speaker> deletedSpeakerEvent = service.deleteSpeaker(new Speaker().setId(1L));
-
-        assertThat(deletedSpeakerEvent.getValue()).isNotNull();
+        assertThat(service.deleteSpeaker(new Speaker().setId(1L))).isTrue();
 
     }
 
@@ -199,10 +192,7 @@ public class SpeakerServiceImplTest {
         when(speakerRepository.findOne(1L)).thenReturn(null);
 
         //On appelle notre service de creation
-        DeletedEvent<Speaker> deletedSpeakerEvent = service.deleteSpeaker(new Speaker().setId(1L));
-
-        assertThat(deletedSpeakerEvent.getValue()).isNull();
-        assertThat(deletedSpeakerEvent.isEntityFound()).isEqualTo(false);
+        assertThat(service.deleteSpeaker(new Speaker().setId(1L))).isFalse();
 
     }
 

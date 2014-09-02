@@ -1,6 +1,7 @@
-package com.ninjamind.conference.service.mock;
+package com.ninjamind.conference.service.mock.sav;
 
 import com.ninjamind.conference.domain.Talk;
+import com.ninjamind.conference.events.CreatedEvent;
 import com.ninjamind.conference.repository.TalkRepository;
 import com.ninjamind.conference.service.talk.TalkServiceImpl;
 import org.junit.Before;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.*;
  * Il ne faudrait pas de verify et ne faire que des stubs
  * @author EHRET_G
  */
-public class TalkServiceImplProblemMockTest {
+public class TalkServiceImplProblemMockAvantModifTest {
 
     public static final String CONF_NAME = "Le bon testeur il teste... le mauvais testeur il teste...";
 
