@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @ContextConfiguration(classes = {ApplicationConfig.class})
-public class TalkArchiverRepositoryImpAbtsractDbunitlTest extends AbstractDbunitRepositoryTest {
+public class TalkArchiverRepositoryImpAbtsractDbunitAvantModifTest extends AbstractDbunitRepositoryTest {
 
     @Autowired
     private TalkArchiverRepository talkArchiverRepository;

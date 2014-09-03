@@ -1,5 +1,7 @@
-package com.ninjamind.conference.repository.interetdbsetup.sav;
+package com.ninjamind.conference.repository.interetdbsetup;
 
+import com.ninjamind.conference.config.ApplicationConfig;
+import com.ninjamind.conference.repository.interetdbsetup.sav.AbstractDbunitRepositoryTest;
 import org.dbunit.Assertion;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
@@ -10,8 +12,15 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.rules.ExternalResource;
 import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,8 +31,7 @@ import java.util.Properties;
  * au repository
  * @author ehret_g
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-public abstract class AbstractDbunitRepositoryTest {
+public class DbunitTestRule extends ExternalResource {
 
     private static Properties properties = new Properties();
     protected IDatabaseTester databaseTester;
@@ -33,11 +41,20 @@ public abstract class AbstractDbunitRepositoryTest {
     protected static String databasePassword;
     protected IDataSet dataSet;
 
+    public DbunitTestRule(IDataSet dataSet) {
+        this.dataSet = dataSet;
+    }
 
+    @Override
+    protected void before() throws Throwable {
+        super.before();
+        initProperties();
+        databaseTester = new JdbcDatabaseTester(databaseJdbcDriver, databaseUrl, databaseUsername, databasePassword);
+        databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
+        databaseTester.setDataSet(dataSet);
+        databaseTester.onSetup();
+    }
 
-    protected abstract IDataSet readDataSet();
-
-    @BeforeClass
     public static void initProperties() throws IOException {
         if(databaseJdbcDriver==null) {
             properties.load(AbstractDbunitRepositoryTest.class.getResourceAsStream("/application.properties"));
@@ -47,18 +64,6 @@ public abstract class AbstractDbunitRepositoryTest {
             databasePassword = properties.getProperty("db.password");
         }
     }
-
-    @Before
-    public void importDataSet() throws Exception {
-        initProperties();
-        IDataSet dataSet = readDataSet();
-        databaseTester = new JdbcDatabaseTester(databaseJdbcDriver, databaseUrl, databaseUsername, databasePassword);
-        databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
-        databaseTester.setDataSet(dataSet);
-        databaseTester.onSetup();
-    }
-
-
 
     public void assertTableInDatabaseIsEqualToXmlDataset(String tableName, String pathDataSetExpected, String ... includedColumns){
         try {

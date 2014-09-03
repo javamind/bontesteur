@@ -1,4 +1,4 @@
-package com.ninjamind.conference.junit.rule;
+package com.ninjamind.conference.repository.interetdbsetup.sav;
 
 import org.dbunit.Assertion;
 import org.dbunit.IDatabaseTester;
