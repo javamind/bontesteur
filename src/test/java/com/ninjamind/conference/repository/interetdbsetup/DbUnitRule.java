@@ -1,7 +1,5 @@
 package com.ninjamind.conference.repository.interetdbsetup;
 
-import com.ninjamind.conference.config.ApplicationConfig;
-import com.ninjamind.conference.repository.interetdbsetup.sav.AbstractDbunitRepositoryTest;
 import org.dbunit.Assertion;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
@@ -14,13 +12,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +23,7 @@ import java.util.Properties;
  * au repository
  * @author ehret_g
  */
-public class DbunitTestRule extends ExternalResource {
+public class DbUnitRule extends ExternalResource {
 
     private static Properties properties = new Properties();
     protected IDatabaseTester databaseTester;
@@ -41,7 +33,7 @@ public class DbunitTestRule extends ExternalResource {
     protected static String databasePassword;
     protected IDataSet dataSet;
 
-    public DbunitTestRule(IDataSet dataSet) {
+    public DbUnitRule(IDataSet dataSet) {
         this.dataSet = dataSet;
     }
 
@@ -55,15 +47,16 @@ public class DbunitTestRule extends ExternalResource {
         databaseTester.onSetup();
     }
 
-    public static void initProperties() throws IOException {
+    public void initProperties() throws IOException {
         if(databaseJdbcDriver==null) {
-            properties.load(AbstractDbunitRepositoryTest.class.getResourceAsStream("/application.properties"));
+            properties.load(DbUnitRule.class.getResourceAsStream("/application.properties"));
             databaseJdbcDriver = properties.getProperty("db.driver");
             databaseUrl = properties.getProperty("db.url");
             databaseUsername = properties.getProperty("db.username");
             databasePassword = properties.getProperty("db.password");
         }
     }
+
 
     public void assertTableInDatabaseIsEqualToXmlDataset(String tableName, String pathDataSetExpected, String ... includedColumns){
         try {

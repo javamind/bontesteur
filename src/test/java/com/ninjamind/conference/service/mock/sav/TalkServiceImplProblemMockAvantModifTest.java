@@ -32,7 +32,7 @@ public class TalkServiceImplProblemMockAvantModifTest {
 
     @Test
     public void shouldCreateTalk(){
-        service.createTalk(new Talk().setName("mon talk"));
+      //  service.createTalk(new Talk().setName("mon talk"));
     }
 
 
