@@ -1,5 +1,6 @@
 package com.ninjamind.conference.repository.interetdbsetup.sav;
 
+import com.ninjamind.conference.category.IntegrationTest;
 import com.ninjamind.conference.config.ApplicationConfig;
 import com.ninjamind.conference.domain.Talk;
 import com.ninjamind.conference.repository.TalkArchiverRepository;
@@ -7,11 +8,13 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -23,6 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @ContextConfiguration(classes = {ApplicationConfig.class})
+@Transactional
+@Category(IntegrationTest.class)
 public class TalkArchiverRepositoryImpAbtsractDbunitAvantModifTest extends AbstractDbunitRepositoryTest {
 
     @Autowired

@@ -7,7 +7,7 @@
  *     avant la Rule Junit ou on est lie a la classe abstraite permettant de mutualiser du cmportement</li>
  *     <li>{@link com.ninjamind.conference.repository.interetdbsetup.sav.TalkArchiverRepositoryImplCibleTest} qui est la
  *     cible que l'on atteint</li>
- *     <li>{@link com.ninjamind.conference.repository.interetdbsetup.sav.TalkArchiverRepositoryImplAvecRuleTest}
+ *     <li>{@link com.ninjamind.conference.repository.interetdbsetup.TalkArchiverRepositoryImplAvecRuleTest}
  *     le test avant refacto</li>
  * </ul>
  */

@@ -44,7 +44,7 @@ public class TalkArchiverRepositoryImplDbUnitTest extends AbstractDbunitTestNgRe
 
 
 
-    @Test(invocationCount = 200)
+    @Test(invocationCount = 1000)
     public void shouldFindOneConfToArchiveWhenYearIs2014() {
         List<Talk> talks = talkArchiverRepository.findTalkToArchive(2014);
         assertThat(talks).hasSize(1);

@@ -8,38 +8,33 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.rules.ExternalResource;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
 /**
- * Classe parente de toutes nos classes de tests permettant de charger le contexte Spring des tests propres
- * au repository
- * @author ehret_g
+ * {@link }
+ *
+ * @author EHRET_G
  */
-public class DbUnitRule extends ExternalResource {
-
-    private static Properties properties = new Properties();
+public class DbUnitTestRule extends ExternalResource {
+    private Properties properties = new Properties();
     protected IDatabaseTester databaseTester;
-    protected static String databaseJdbcDriver;
-    protected static String databaseUrl;
-    protected static String databaseUsername;
-    protected static String databasePassword;
     protected IDataSet dataSet;
+    protected String databaseJdbcDriver;
+    protected String databaseUrl;
+    protected String databaseUsername;
+    protected String databasePassword;
 
-    public DbUnitRule(IDataSet dataSet) {
+    public DbUnitTestRule(IDataSet dataSet) {
         this.dataSet = dataSet;
     }
 
+
     @Override
     protected void before() throws Throwable {
-        super.before();
         initProperties();
         databaseTester = new JdbcDatabaseTester(databaseJdbcDriver, databaseUrl, databaseUsername, databasePassword);
         databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
@@ -47,18 +42,9 @@ public class DbUnitRule extends ExternalResource {
         databaseTester.onSetup();
     }
 
-    public void initProperties() throws IOException {
-        if(databaseJdbcDriver==null) {
-            properties.load(DbUnitRule.class.getResourceAsStream("/application.properties"));
-            databaseJdbcDriver = properties.getProperty("db.driver");
-            databaseUrl = properties.getProperty("db.url");
-            databaseUsername = properties.getProperty("db.username");
-            databasePassword = properties.getProperty("db.password");
-        }
-    }
 
 
-    public void assertTableInDatabaseIsEqualToXmlDataset(String tableName, String pathDataSetExpected, String ... includedColumns){
+    public void assertTableInDatabaseIsEqualToXmlDataset(String tableName, String pathDataSetExpected, String... includedColumns) {
         try {
             IDataSet databaseDataSet = databaseTester.getConnection().createDataSet();
             ITable actualTable = databaseDataSet.getTable(tableName);
@@ -66,17 +52,21 @@ public class DbUnitRule extends ExternalResource {
             ITable expectedTable = expectedDataSet.getTable(tableName);
             ITable filteredActualTable = DefaultColumnFilter.includedColumnsTable(actualTable, includedColumns);
             Assertion.assertEquals(expectedTable, filteredActualTable);
-
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
 
-
-
-
+    private void initProperties() throws IOException {
+        if (databaseJdbcDriver == null) {
+            properties.load(getClass().getResourceAsStream("/application.properties"));
+            databaseJdbcDriver = properties.getProperty("db.driver");
+            databaseUrl = properties.getProperty("db.url");
+            databaseUsername = properties.getProperty("db.username");
+            databasePassword = properties.getProperty("db.password");
+        }
+    }
 
 
 }

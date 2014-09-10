@@ -4,6 +4,7 @@ import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.destination.DataSourceDestination;
 import com.ninja_squad.dbsetup.generator.ValueGenerators;
 import com.ninja_squad.dbsetup.operation.Operation;
+import com.ninjamind.conference.category.IntegrationTest;
 import com.ninjamind.conference.config.ApplicationConfig;
 import com.ninjamind.conference.domain.Status;
 import com.ninjamind.conference.domain.Talk;
@@ -11,9 +12,13 @@ import com.ninjamind.conference.repository.TalkArchiverRepository;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -29,7 +34,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author EHRET_G
  */
 @ContextConfiguration(classes = {ApplicationConfig.class})
-public class TalkArchiverRepositoryImplCibleTest extends AbstractTransactionalJUnit4SpringContextTests {
+@RunWith(SpringJUnit4ClassRunner.class)
+@Category(IntegrationTest.class)
+@Transactional
+public class TalkArchiverRepositoryImplCibleTest {
 
     @Autowired
     protected DataSource dataSource;

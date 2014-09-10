@@ -1,5 +1,6 @@
 package com.ninjamind.conference.repository.interetdbsetup.sav;
 
+import com.ninjamind.conference.category.IntegrationTest;
 import com.ninjamind.conference.config.ApplicationConfig;
 import com.ninjamind.conference.domain.Talk;
 import com.ninjamind.conference.repository.TalkArchiverRepository;
@@ -8,6 +9,7 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -35,7 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ApplicationConfig.class})
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, TransactionalTestExecutionListener.class})
+@Category(IntegrationTest.class)
 @Transactional
 public class TalkArchiverRepositoryImplAvecRuleTest {
 

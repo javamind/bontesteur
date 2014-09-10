@@ -58,7 +58,7 @@ public class TalkArchiverRepositoryDbSetupSpeedTest extends AbstractTransactiona
 
 
 
-    @Test(invocationCount = 200)
+    @Test(invocationCount = 1000)
     public void shouldFindOneConfToArchiveWhenYearIs2014() {
         dbSetupTracker.skipNextLaunch();
         List<Talk> talks = talkArchiverRepository.findTalkToArchive(2014);

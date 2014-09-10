@@ -10,44 +10,38 @@ import com.ninjamind.conference.config.ApplicationConfig;
 import com.ninjamind.conference.domain.Status;
 import com.ninjamind.conference.domain.Talk;
 import com.ninjamind.conference.repository.TalkArchiverRepository;
-import org.dbunit.dataset.DataSetException;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.joda.time.DateTime;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
-import java.io.File;
-import java.net.MalformedURLException;
 import java.util.List;
 
 import static com.ninja_squad.dbsetup.Operations.deleteAllFrom;
 import static com.ninja_squad.dbsetup.Operations.insertInto;
-import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
-
+/**
+ * Test de a classe {@link com.ninjamind.conference.repository.TalkArchiverRepository}
+ *
+ * @author EHRET_G
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ApplicationConfig.class})
 @Transactional
-@RunWith(SpringJUnit4ClassRunner.class)
-public class TalkArchiverRepositoryImpAbtsractDbunitTest {
+public class TalkArchiverRepositoryImplAvecRuleTest {
 
-    @Autowired
-    protected PlatformTransactionManager transactionManager;
+    /**
+     * Repository a tester
+     */
     @Autowired
     private TalkArchiverRepository talkArchiverRepository;
+
     @Autowired
     private DataSource dataSource;
 
@@ -55,18 +49,31 @@ public class TalkArchiverRepositoryImpAbtsractDbunitTest {
 
     @Before
     public void setUp() throws Exception {
-        Operation initData = sequenceOf(
+        Operation operation = Operations.sequenceOf(
                 deleteAllFrom("talk"),
                 insertInto("talk")
-                        .withGeneratedValue("id", ValueGenerators.sequence().startingAt(1).incrementingBy(1))
+                        .withGeneratedValue("id", ValueGenerators.sequence())
                         .columns("name", "status", "dateStart", "dateEnd")
                         .values("Le bon testeur il teste", Status.ACTIVE, new DateTime(2014, 4, 18, 13, 30).toDate(), new DateTime(2014, 4, 18, 14, 20).toDate())
                         .values("La conf passee", Status.ACTIVE, new DateTime(2010, 4, 18, 13, 30).toDate(), new DateTime(2010, 4, 18, 14, 20).toDate())
                         .build()
         );
-        dbSetupTracker.launchIfNecessary(new DbSetup(DataSourceDestination.with(dataSource), initData));
+
+        DbSetup dbSetup = new DbSetup(DataSourceDestination.with(dataSource), operation);
+        dbSetupTracker.launchIfNecessary(dbSetup);
     }
 
+    /**
+     * Test de {@link com.ninjamind.conference.repository.TalkArchiverRepository#findTalkToArchive(Integer)} quand arg invalide
+     */
+    @Test(expected = NullPointerException.class)
+    public void shouldThrowExceptionWhenArgIsNull() {
+        talkArchiverRepository.findTalkToArchive(null);
+    }
+
+    /**
+     * Test de {@link com.ninjamind.conference.repository.TalkArchiverRepository#findTalkToArchive(Integer)} quand tout est OK
+     */
     @Test
     public void shouldFindOneConfToArchiveWhenYearIs2014() {
         dbSetupTracker.skipNextLaunch();
@@ -77,10 +84,12 @@ public class TalkArchiverRepositoryImpAbtsractDbunitTest {
 
     }
 
+    /**
+     * Test de la fonction d'archivage {@link com.ninjamind.conference.repository.TalkArchiverRepository#archiveTalks(Integer)} quand rien n'est trouve car la date
+     * passee est trop vieille
+     */
     @Test
     public void shouldArchiveTalkWhenOneIsFound() throws Exception {
         assertThat(talkArchiverRepository.archiveTalks(2014)).isEqualTo(1);
-
     }
-
 }

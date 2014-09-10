@@ -197,9 +197,7 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.16</version>
-                <configuration>
-                    <groups>!perf</groups>
-                </configuration>
+
             </plugin>
 
             <plugin>
@@ -253,21 +251,5 @@
 
     </build>
 
-    <profiles>
-        <profile>
-            <id>initdata</id>
-            <build>
-                <plugins>
-                    <!-- Par defaut on ne lance pas le script de mise à jour de la base de données-->
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.16</version>
-                        <configuration>
-                            <groups>com.ninjamind.conference.category.InitializeTest</groups>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+
 </project>

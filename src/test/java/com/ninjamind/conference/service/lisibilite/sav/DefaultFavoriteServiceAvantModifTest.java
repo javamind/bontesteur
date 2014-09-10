@@ -56,9 +56,8 @@ public class DefaultFavoriteServiceAvantModifTest {
         List<String> expected = Arrays.asList("Mix-IT2014", "Devoxx2014");
         assertEquals(expected, confNames);
 
-        /////////////// deuxième cas de test : Devoxx2014 + Mix-IT2014 + JugSummerCamp2014
+        /////////////// deuxième cas de test : Mix-IT2014 + JugSummerCamp2014
         conferences.clear();
-        conferences.add(devoxx2014);
         conferences.add(mixit2014);
         Conference jugsummercamp2014 = new Conference().setName("JugSummerCamp2014").setNbConferenceSlots(12L).setNbConferenceProposals(97L);
         conferences.add(jugsummercamp2014);
@@ -69,7 +68,7 @@ public class DefaultFavoriteServiceAvantModifTest {
         for (Conference conf : theHypestConfs2) {
             confNames2.add(conf.getName());
         }
-        List<String> expected2 = Arrays.asList("JugSummerCamp2014","Mix-IT2014","Devoxx2014");
+        List<String> expected2 = Arrays.asList("JugSummerCamp2014","Mix-IT2014");
         assertEquals(expected2, confNames2);
 
         /////////////// troisième cas de test : Devoxx2014 + Mix-IT2014 sans un parametre

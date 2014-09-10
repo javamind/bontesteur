@@ -1,10 +1,12 @@
 package com.ninjamind.conference.controller;
 
 import com.google.common.collect.Lists;
+import com.ninjamind.conference.category.IntegrationTest;
 import com.ninjamind.conference.domain.Speaker;
 import com.ninjamind.conference.service.speaker.SpeakerService;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;

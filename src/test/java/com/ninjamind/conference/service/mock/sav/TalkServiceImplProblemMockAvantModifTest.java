@@ -23,7 +23,7 @@ public class TalkServiceImplProblemMockAvantModifTest {
 
     private TalkRepository talkRepository;
 
-    private TalkService service;
+    private TalkService service  = new TalkServiceImpl();;
 
     @Before
     public void setUp() throws Exception {

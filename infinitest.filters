@@ -1,1 +1,2 @@
 com\.ninjamind\.conference\.repository\..*
+excluded-groups=perf
