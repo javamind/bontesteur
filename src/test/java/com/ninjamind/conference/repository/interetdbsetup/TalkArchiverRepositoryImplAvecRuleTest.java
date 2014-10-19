@@ -7,10 +7,13 @@ import com.ninjamind.conference.repository.TalkArchiverRepository;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -24,12 +27,23 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
+/**
+ * Test de a classe {@link com.ninjamind.conference.repository.TalkArchiverRepository}
+ *
+ * @author EHRET_G
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ApplicationConfig.class})
-@Transactional
 @Category(IntegrationTest.class)
-public class TalkArchiverRepositoryImpAbtsractDbunit extends AbstractDbunitRepositoryTest {
+@Transactional
+public class TalkArchiverRepositoryImplAvecRuleTest {
 
+    @Rule
+    public DbUnitTestRule dbUnitTestRule = new DbUnitTestRule(readDataSet());
+
+    /**
+     * Repository a tester
+     */
     @Autowired
     private TalkArchiverRepository talkArchiverRepository;
 
@@ -37,15 +51,18 @@ public class TalkArchiverRepositoryImpAbtsractDbunit extends AbstractDbunitRepos
     protected PlatformTransactionManager transactionManager;
 
 
-
+    /**
+     * Fichier de donn�es
+     *
+     * @return
+     */
     protected IDataSet readDataSet() {
         try {
             return new FlatXmlDataSetBuilder().build(new File("src/test/resources/datasets/talk_init.xml"));
         } catch (MalformedURLException | DataSetException e) {
-            throw new RuntimeException(e);
+           throw new RuntimeException(e);
         }
     }
-
 
 
     @Test
@@ -58,22 +75,8 @@ public class TalkArchiverRepositoryImpAbtsractDbunit extends AbstractDbunitRepos
     }
 
 
-
-
     @Test
     public void shouldArchiveTalkWhenOneIsFound() throws Exception {
-
-        TransactionTemplate tp = new TransactionTemplate(transactionManager);
-        tp.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-        tp.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                assertThat(talkArchiverRepository.archiveTalks(2014)).isEqualTo(1);
-            }
-        });
-
-        assertTableInDatabaseIsEqualToXmlDataset("TALK", "src/test/resources/datasets/talk_archived.xml", "id", "name", "dateStart", "dateEnd", "status");
-
+        assertThat(talkArchiverRepository.archiveTalks(2014)).isEqualTo(1);
     }
-
 }
