@@ -36,26 +36,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ContextConfiguration(classes = {ApplicationConfig.class})
 @Category(IntegrationTest.class)
 @Transactional
-public class TalkArchiverRepositoryImplAvecRuleTest {
+public class TalkArchiverRepositoryImplTest {
 
     @Rule
     public DbUnitTestRule dbUnitTestRule = new DbUnitTestRule(readDataSet());
 
-    /**
-     * Repository a tester
-     */
     @Autowired
     private TalkArchiverRepository talkArchiverRepository;
 
-    @Autowired
-    protected PlatformTransactionManager transactionManager;
 
-
-    /**
-     * Fichier de donn�es
-     *
-     * @return
-     */
     protected IDataSet readDataSet() {
         try {
             return new FlatXmlDataSetBuilder().build(new File("src/test/resources/datasets/talk_init.xml"));
