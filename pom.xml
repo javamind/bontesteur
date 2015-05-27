@@ -234,9 +234,9 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>3.0</version>
                 <configuration>
-                    <url>jdbc:postgresql://localhost:5432/devoxx2014</url>
-                    <user>devoxx2014</user>
-                    <password>devoxx2014</password>
+                    <url>jdbc:postgresql://localhost:5432/bontesteur</url>
+                    <user>bontesteur</user>
+                    <password>bontesteur</password>
                 </configuration>
                 <dependencies>
                     <dependency>
