@@ -1,20 +1,26 @@
 package com.ninjamind.conference.service.lisibilite.sav;
 
+import com.google.common.collect.Lists;
 import com.ninjamind.conference.domain.Conference;
 import com.ninjamind.conference.exception.ConferenceNotFoundException;
 import com.ninjamind.conference.repository.ConferenceRepository;
 import com.ninjamind.conference.service.DefaultFavoriteService;
+import junitparams.Parameters;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static junitparams.JUnitParamsRunner.$;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -22,17 +28,18 @@ import static org.mockito.Mockito.when;
  * Test de la class {@link com.ninjamind.conference.service.DefaultFavoriteService}
  */
 public class DefaultFavoriteServiceAvantModifTest {
-    @Mock
+
     private ConferenceRepository conferenceRepository;
 
-    @InjectMocks
     private DefaultFavoriteService defaultFavoriteService;
 
     private List<Conference> conferences = new ArrayList<>();
 
     @Before
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        conferenceRepository = Mockito.mock(ConferenceRepository.class);
+        defaultFavoriteService = new DefaultFavoriteService();
+        defaultFavoriteService.setConferenceRepository(conferenceRepository);
     }
     /**
      * Test de la methode {@link com.ninjamind.conference.service.DefaultFavoriteService#getTheHypestConfs()}

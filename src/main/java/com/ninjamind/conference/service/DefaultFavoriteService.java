@@ -1,12 +1,13 @@
 package com.ninjamind.conference.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.google.common.annotations.VisibleForTesting;
 import com.ninjamind.conference.domain.Conference;
 import com.ninjamind.conference.exception.ConferenceNotFoundException;
 import com.ninjamind.conference.repository.ConferenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Implementation de {@link com.ninjamind.conference.service.FavoriteService}
@@ -35,4 +36,10 @@ public class DefaultFavoriteService implements FavoriteService {
         }
         return results;
     }
+
+    @VisibleForTesting
+    public void setConferenceRepository(ConferenceRepository conferenceRepository) {
+        this.conferenceRepository = conferenceRepository;
+    }
+
 }

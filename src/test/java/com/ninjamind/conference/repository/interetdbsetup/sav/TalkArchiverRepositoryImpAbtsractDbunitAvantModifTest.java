@@ -49,7 +49,7 @@ public class TalkArchiverRepositoryImpAbtsractDbunitAvantModifTest extends Abstr
 
 
     @Test
-    public void shouldFindOneConfToArchiveWhenYearIs2014() {
+    public void should_find_one_conf_to_archive_in_2014() {
         List<Talk> talks = talkArchiverRepository.findTalkToArchive(2014);
         assertThat(talks).hasSize(1);
         assertThat(talks.get(0)).isEqualToComparingOnlyGivenFields(
@@ -61,7 +61,7 @@ public class TalkArchiverRepositoryImpAbtsractDbunitAvantModifTest extends Abstr
 
 
     @Test
-    public void shouldArchiveTalkWhenOneIsFound() throws Exception {
+    public void should_archive_conf() throws Exception {
 
         TransactionTemplate tp = new TransactionTemplate(transactionManager);
         tp.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
