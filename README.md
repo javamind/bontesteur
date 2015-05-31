@@ -3,6 +3,8 @@ bontesteur
 
 Comme nous avons eu de bons retours (**Agnes Crepet** et **Guillaume EHRET**) sur notre présentation à Devoxx 2014  <a href="http://cfp.devoxx.fr/devoxxfr2014/talk/BBV-277/Le%20bon%20testeur%20il%20teste....%20et%20le%20mauvais%20testeur%20il%20teste%20aussi...">Le bon testeur il teste, le mauvais testeur il teste..."</a> nous avons choisi de redonner ce talk. Le projet a donc été quelque peu raffraîchi.
 
+<img src="https://github.com/javamind/bontesteurweb/blob/master/app/images/us.jpg?raw=true"/>
+
 Nous avons deux modules
 
 * un module web avec une interface en Angular JS
