@@ -1,4 +1,4 @@
-package com.ninjamind.conference.repository.performance;
+package com.ninjamind.conference.abc.performance;
 
 import com.ninjamind.conference.config.ApplicationConfig;
 import com.ninjamind.conference.domain.Talk;
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * en utilisant testNg et DbUnit. Le but est de voir le temps mis par les tests quand
  * on accede en boucle e la base de donnees
  *
- * @see com.ninjamind.conference.repository.performance.TalkArchiverRepositoryDbSetupTest
+ * @see com.ninjamind.conference.abc.performance.TalkArchiverRepositoryDbSetupTest
  * @author EHRET_G
  */
 @ContextConfiguration(classes = {ApplicationConfig.class})

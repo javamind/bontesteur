@@ -1,4 +1,4 @@
-package com.ninjamind.conference.repository.performance;
+package com.ninjamind.conference.abc.performance;
 
 import com.ninjamind.conference.config.ApplicationConfig;
 import org.dbunit.IDatabaseTester;

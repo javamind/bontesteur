@@ -1,4 +1,4 @@
-package com.ninjamind.conference.service.mock;
+package com.ninjamind.conference.abc.mock;
 
 import com.ninjamind.conference.domain.Talk;
 import com.ninjamind.conference.repository.TalkRepository;

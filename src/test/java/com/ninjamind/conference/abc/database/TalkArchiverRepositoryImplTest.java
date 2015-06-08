@@ -1,4 +1,4 @@
-package com.ninjamind.conference.repository.interetdbsetup;
+package com.ninjamind.conference.abc.database;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -1,7 +1,6 @@
-package com.ninjamind.conference.repository.performance;
+package com.ninjamind.conference.abc.performance;
 
 import com.ninja_squad.dbsetup.DbSetup;
-import com.ninja_squad.dbsetup.DbSetupTracker;
 import com.ninja_squad.dbsetup.destination.DataSourceDestination;
 import com.ninja_squad.dbsetup.generator.ValueGenerators;
 import com.ninja_squad.dbsetup.operation.Operation;
@@ -24,15 +23,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test de a classe {@link com.ninjamind.conference.repository.TalkArchiverRepository}
- * en utilisant testNg et DbSetup. Le but est de voir que Dbsetup est encore plus rapide si on
- * ne charge la donnee qu'au besoin
+ * en utilisant testNg et DbSetup. Le but est de voir que Dbsetup est beaucoup plus rapide
  *
- * @see TalkArchiverRepositoryImplDbUnitTest
+ * @see com.ninjamind.conference.abc.performance.TalkArchiverRepositoryImplDbUnitTest
  * @author EHRET_G
  */
 @ContextConfiguration(classes = {ApplicationConfig.class})
 @Test(groups = {"perf"})
-public class TalkArchiverRepositoryDbSetupSpeedTest extends AbstractTransactionalTestNGSpringContextTests {
+public class TalkArchiverRepositoryDbSetupTest extends AbstractTransactionalTestNGSpringContextTests {
 
     @Autowired
     protected DataSource dataSource;
@@ -40,7 +38,6 @@ public class TalkArchiverRepositoryDbSetupSpeedTest extends AbstractTransactiona
     @Autowired
     private TalkArchiverRepository talkArchiverRepository;
 
-    private static DbSetupTracker dbSetupTracker = new DbSetupTracker();
 
     @BeforeMethod
     public void prepare(){
@@ -54,7 +51,7 @@ public class TalkArchiverRepositoryDbSetupSpeedTest extends AbstractTransactiona
                         .build()
         );
         DbSetup dbSetup = new DbSetup(DataSourceDestination.with(dataSource), init_data);
-        dbSetupTracker.launchIfNecessary(dbSetup);
+        dbSetup.launch();
     }
 
 
@@ -62,7 +59,6 @@ public class TalkArchiverRepositoryDbSetupSpeedTest extends AbstractTransactiona
 
     @Test(invocationCount = 1000)
     public void shouldFindOneConfToArchiveWhenYearIs2014() {
-        dbSetupTracker.skipNextLaunch();
         List<Talk> talks = talkArchiverRepository.findTalkToArchive(2014);
         assertThat(talks).hasSize(1);
         assertThat(talks.get(0)).isEqualToComparingOnlyGivenFields(

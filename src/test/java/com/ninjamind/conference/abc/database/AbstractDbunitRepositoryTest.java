@@ -1,4 +1,4 @@
-package com.ninjamind.conference.repository.interetdbsetup;
+package com.ninjamind.conference.abc.database;
 
 import java.io.File;
 import java.io.IOException;
