@@ -8,6 +8,7 @@ import com.ninjamind.conference.config.ApplicationConfig;
 import com.ninjamind.conference.domain.Status;
 import com.ninjamind.conference.domain.Talk;
 import com.ninjamind.conference.repository.TalkArchiverRepository;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;

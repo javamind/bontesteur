@@ -39,8 +39,7 @@ public class TalkServiceImplProblemMockTest {
     @Test
     public void shouldCreateTalk(){
         //La sauvegarde du talk retournera une instance avec un id
-        Talk talkCreated = new Talk().setName(CONF_NAME);
-        talkCreated.setId(2345L);
+        Talk talkCreated = new Talk().setName(CONF_NAME).setId(2345L);
         when(talkRepository.save(any(Talk.class))).thenReturn(talkCreated);
 
         //On appelle notre service de creation

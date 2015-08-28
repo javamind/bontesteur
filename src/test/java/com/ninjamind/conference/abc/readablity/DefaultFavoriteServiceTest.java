@@ -14,9 +14,7 @@ import com.ninjamind.conference.service.DefaultFavoriteService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  * Test de la class {@link com.ninjamind.conference.service.DefaultFavoriteService}
