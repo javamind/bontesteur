@@ -1,7 +1,9 @@
 package com.ninjamind.conference.abc.mock;
 
 import com.ninjamind.conference.domain.Talk;
+import com.ninjamind.conference.repository.ConferenceRepository;
 import com.ninjamind.conference.repository.TalkRepository;
+import com.ninjamind.conference.service.DefaultFavoriteService;
 import com.ninjamind.conference.service.talk.TalkService;
 import com.ninjamind.conference.service.talk.TalkServiceImpl;
 import org.assertj.core.api.Assertions;
@@ -28,13 +30,15 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 public class TalkServiceImplProblemMockTest {
 
     public static final String CONF_NAME = "Le bon testeur il teste... le mauvais testeur il teste...";
-
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule();
-    @Mock
     private TalkRepository talkRepository;
-    @InjectMocks
-    private TalkService service = new TalkServiceImpl();
+    private TalkService service;
+
+    @Before
+    public void setup() {
+        talkRepository = Mockito.mock(TalkRepository.class);
+        service = new TalkServiceImpl();
+        service.setTalkRepository(talkRepository);
+    }
 
     @Test
     public void shouldCreateTalk(){
